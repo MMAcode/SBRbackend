@@ -1,17 +1,13 @@
 package makarov.learning.model;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
-// @Getter
-// @Setter
-// @Data
+@Data
 @Entity
 @Table(name="users")
+// @Builder
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,42 +17,17 @@ public class User {
     @Column(name="lastName") private String lastName; //if column name not specified, property name is used by default
     @Column private String email;
 
+    // @Builder
     public User(){}
 
-    public User(@NonNull String firstName) {
-        super();
+    @Builder(toBuilder = true)
+    public User(@NonNull String firstName, String lastName, String email) {
         this.firstName = firstName;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
         this.email = email;
     }
+    // @Builder
+    // public void buildHelp(){};
+
+
 }
