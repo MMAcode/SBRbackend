@@ -12,7 +12,7 @@ import javax.persistence.*;
 // @Data
 @Entity
 @Table(name="users")
-public class UserModel {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -21,9 +21,9 @@ public class UserModel {
     @Column(name="lastName") private String lastName; //if column name not specified, property name is used by default
     @Column private String email;
 
-    public UserModel(){}
+    public User(){}
 
-    public UserModel(@NonNull String firstName) {
+    public User(@NonNull String firstName) {
         super();
         this.firstName = firstName;
     }
