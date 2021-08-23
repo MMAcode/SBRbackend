@@ -17,17 +17,20 @@ public class User {
     @Column(name="lastName") private String lastName; //if column name not specified, property name is used by default
     @Column private String email;
 
-    // @Builder
     public User(){}
 
     @Builder(toBuilder = true)
-    public User(@NonNull String firstName, String lastName, String email) {
+    public User(String firstName, String lastName, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
     }
-    // @Builder
-    // public void buildHelp(){};
+    // if we want to implement builder with mandatory fields in its constructor:
+    // public static UserBuilder builder(@NonNull String firstName){
+    //     return new UserBuilder().firstName(firstName);
+    // }
+    //    		-->   userRepository.save(User.builder("MiroMandatoryName").build());
+
 
 
 }

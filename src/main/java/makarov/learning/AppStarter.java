@@ -18,8 +18,9 @@ public class AppStarter implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		userRepository.save(User.builder().firstName("MiroBuilder").build());
 		// userRepository.save(User.builder().lastName("Makarov").build()); //Does not compile as first name is required
+
+		userRepository.save(User.builder().firstName("MiroBuilder").build());
 		userRepository.save(User.builder().firstName("MiroBuilder2").lastName("Makarov").build());
 		userRepository.save(User.builder().firstName("MiroBuilder2").email("someEmail").build());
 	}
