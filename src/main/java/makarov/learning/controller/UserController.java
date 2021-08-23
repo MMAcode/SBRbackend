@@ -16,6 +16,7 @@ public class UserController {
     UserRepository userRepository;
 
     @GetMapping("users")
+    //http://localhost:8080/api/users
     public List<User> getUsers(){
         return userRepository.findAll();
     }
