@@ -12,13 +12,15 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins="*") //on a class ok
-@RequestMapping("api/")
+@RequestMapping({"","/","api/"})
+// @RequestMapping("api/")
 public class UserController {
     @Autowired
     UserRepository userRepository;
 
     @GetMapping("users")
     //http://localhost:8080/api/users
+    // http://localhost:8080/users
     public List<User> getUsers(){
         return userRepository.findAll();
     }
