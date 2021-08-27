@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @Column private long id;
 
     @Column @NonNull private String firstName;
     @Column(name="lastName") private String lastName; //if column name not specified, property name is used by default

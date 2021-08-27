@@ -19,9 +19,8 @@ public class UserController {
     UserRepository userRepository;
 
     @GetMapping("users")
-    //http://localhost:8080/api/users
-    // http://localhost:8080/users
-    public List<User> getUsers(){
+    public Iterable<User> getUsers(){
+    // public List<User> getUsers(){
         return userRepository.findAll();
     }
 
