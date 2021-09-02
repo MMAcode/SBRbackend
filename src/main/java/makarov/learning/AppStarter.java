@@ -1,14 +1,10 @@
 package makarov.learning;
 
-import makarov.learning.model.User;
 import makarov.learning.repository.UserRepository;
-import makarov.learning.security.Authority;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.util.List;
 
 @SpringBootApplication
 public class AppStarter implements CommandLineRunner {

@@ -1,7 +1,6 @@
 package makarov.learning.security;
 
-import makarov.learning.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import makarov.learning.model.MMUser;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -11,10 +10,10 @@ import java.util.List;
 
 public class MyUserDetails_UserSecurityDetailsService implements UserDetails {
 
-    private final User user;
+    private final MMUser user;
 
 
-    public MyUserDetails_UserSecurityDetailsService(User user) {
+    public MyUserDetails_UserSecurityDetailsService(MMUser user) {
         this.user = user;
     }
 

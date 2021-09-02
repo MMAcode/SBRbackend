@@ -17,7 +17,7 @@ import java.util.List;
 @ToString
 
 // @Builder
-public class User {
+public class MMUser {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private long
             id;
     @NonNull private String
