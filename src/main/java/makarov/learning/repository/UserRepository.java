@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @CrossOrigin(origins="")
@@ -16,6 +17,8 @@ import java.util.List;
 // public interface UserRepository extends JpaRepository<User, Long> { - probably not for  mySql
 public interface UserRepository extends CrudRepository<User, Long> {
     List<User> findByFirstName(String firstName);
+    Optional<User> findByUsername(String firstName);
+
     List<User> findByLastNameContains(String lastName);
     // List<User> findByFirstName(@Param("firstName") String firstName);
     // -> http://localhost:8080/rest/users/search/findByFirstName?firstName=MiroBuilder

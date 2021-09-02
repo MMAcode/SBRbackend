@@ -1,1 +1,1 @@
-INSERT INTO users (first_name)values("Tolkien");
+# INSERT INTO users (first_name)values("Tolkien");

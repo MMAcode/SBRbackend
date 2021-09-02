@@ -1,12 +1,21 @@
 package makarov.learning.model;
 
 import lombok.*;
+import makarov.learning.security.Authority;
 
 import javax.persistence.*;
+import java.util.List;
 
-@Data
+// @Data
+@Getter
+@Setter
 @Entity
 @Table(name="users")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder(toBuilder = true)
+@ToString
+
 // @Builder
 public class User {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private long
@@ -19,15 +28,25 @@ public class User {
             email;
     private String
             sex;
+    @NonNull @Column(columnDefinition="varchar(45)", unique = true) String
+            username;
+    @Column(columnDefinition="varchar(45)") String
+            password;
+    // @ElementCollection private List<String>
+    //         authorities;
+    @ElementCollection private List<Authority>
+            authorities;
 
-    public User(){}
 
-    @Builder(toBuilder = true)
-    public User(String firstName, String lastName, String email) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-    }
+    // public User(){}
+
+    // @Builder(toBuilder = true)
+    // public User(String firstName, String lastName, String email) {
+    //     this.firstName = firstName;
+    //     this.lastName = lastName;
+    //     this.email = email;
+    // }
+
     // if we want to implement builder with mandatory fields in its constructor:
     // public static UserBuilder builder(@NonNull String firstName){
     //     return new UserBuilder().firstName(firstName);

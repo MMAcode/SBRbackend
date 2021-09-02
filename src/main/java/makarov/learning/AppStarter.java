@@ -2,10 +2,13 @@ package makarov.learning;
 
 import makarov.learning.model.User;
 import makarov.learning.repository.UserRepository;
+import makarov.learning.security.Authority;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import java.util.List;
 
 @SpringBootApplication
 public class AppStarter implements CommandLineRunner {
@@ -18,10 +21,9 @@ public class AppStarter implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		// userRepository.save(User.builder().lastName("Makarov").build()); //Does not compile as first name is required
-
-		// userRepository.save(User.builder().firstName("MiroBuilder").build());
-		// userRepository.save(User.builder().firstName("MiroBuilder2").lastName("Makarov").build());
-		// userRepository.save(User.builder().firstName("MiroBuilder2").email("someEmail").build());
+		// userRepository.save(User.builder().firstName("user").lastName("Makarov").username("x1").authorities(List.of(Authority.AUTH1)).build());
+		// userRepository.save(User.builder().firstName("user").lastName("Makarov").username("x2").authorities(List.of(Authority.AUTH2)).build());
+		// userRepository.save(User.builder().firstName("user").lastName("Makarov").username("x12").authorities(List.of(Authority.AUTH1,Authority.AUTH2)).build());
+		// userRepository.save(User.builder().firstName("user").lastName("Makarov").username("x123").authorities(List.of(Authority.AUTH1,Authority.AUTH2,Authority.AUTH3)).build());
 	}
 }
