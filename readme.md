@@ -17,3 +17,23 @@ http://localhost:8080/rest/users/
 http://localhost:8080/api/users
 
 http://localhost:8080/users
+
+# Spring security
+logout url: http://localhost:8080/logout
+http://localhost:8080/login?logout
+
+
+# Testing
+
+# DB
+@Sql({"/employees_schema.sql", "/import_employees.sql"})
+public class SpringBootInitialLoadIntegrationTest {
+
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
+    @Test
+    public void testLoadDataForTestClass() {
+        assertEquals(3, employeeRepository.findAll().size());
+    }
+}

@@ -9,13 +9,16 @@ import javax.persistence.*;
 @Table(name="users")
 // @Builder
 public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column private long id;
-
-    @Column @NonNull private String firstName;
-    @Column(name="lastName") private String lastName; //if column name not specified, property name is used by default
-    @Column private String email;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private long
+            id;
+    @NonNull private String
+            firstName;
+    @Column(name="lastName") private String
+            lastName; //if @Column not specified, defaults used
+    @Column private String
+            email;
+    private String
+            sex;
 
     public User(){}
 
