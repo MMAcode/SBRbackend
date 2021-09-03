@@ -22,19 +22,21 @@ import javax.sql.DataSource;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 // public class SecurityConfiguration {
 
-    // @Override //from: https://github.com/in28minutes/spring-boot-react-fullstack-examples/blob/master/spring-boot-react-basic-auth-login-logout/backend-spring-boot-react-basic-auth-login-logout/src/main/java/com/in28minutes/fullstack/springboot/fullstack/basic/authentication/springbootfullstackbasicauthloginlogout/basic/auth/SpringSecurityConfigurationBasicAuth.java
-    // protected void configure(HttpSecurity http) throws Exception {
-    //     http
-    //             .csrf().disable()
-    //             .authorizeRequests()
-    //             .antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
-    //             .anyRequest().authenticated()
-    //             .and()
-    //             .httpBasic();
-    // }
+    @Override //from: https://github.com/in28minutes/spring-boot-react-fullstack-examples/blob/master/spring-boot-react-basic-auth-login-logout/backend-spring-boot-react-basic-auth-login-logout/src/main/java/com/in28minutes/fullstack/springboot/fullstack/basic/authentication/springbootfullstackbasicauthloginlogout/basic/auth/SpringSecurityConfigurationBasicAuth.java
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                // .csrf().disable()
+                // .authorizeRequests()
+                // .antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
+                // .anyRequest().authenticated()
+                // .and()
+                // .httpBasic()
+                    .formLogin().defaultSuccessUrl("/users")
+                ;
+    }
 
-    @Autowired
-    DataSource dataSource; //by default pointing to H2
+    // @Autowired
+    // DataSource dataSource; //by default pointing to H2
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         // auth.jdbcAuthentication().dataSource(dataSource); //connect to specific database

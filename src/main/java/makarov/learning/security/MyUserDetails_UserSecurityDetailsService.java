@@ -20,8 +20,8 @@ public class MyUserDetails_UserSecurityDetailsService implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // return (Collection<Authority>) user.getAuthorities();
-        return List.of(()-> "read");
+        return (Collection<Authority>) user.getAuthorities();
+        // return List.of(()-> "read");
     }
 
     @Override
