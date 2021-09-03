@@ -3,7 +3,12 @@ package makarov.learning.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,8 +19,28 @@ import javax.sql.DataSource;
 
 // @EnableWebSecurity //to enable WEB security
 @Configuration
-// public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-public class SecurityConfiguration {
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+// public class SecurityConfiguration {
+
+    // @Override //from: https://github.com/in28minutes/spring-boot-react-fullstack-examples/blob/master/spring-boot-react-basic-auth-login-logout/backend-spring-boot-react-basic-auth-login-logout/src/main/java/com/in28minutes/fullstack/springboot/fullstack/basic/authentication/springbootfullstackbasicauthloginlogout/basic/auth/SpringSecurityConfigurationBasicAuth.java
+    // protected void configure(HttpSecurity http) throws Exception {
+    //     http
+    //             .csrf().disable()
+    //             .authorizeRequests()
+    //             .antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
+    //             .anyRequest().authenticated()
+    //             .and()
+    //             .httpBasic();
+    // }
+
+    @Autowired
+    DataSource dataSource; //by default pointing to H2
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        // auth.jdbcAuthentication().dataSource(dataSource); //connect to specific database
+        auth.userDetailsService(userDetailsService())
+               ;
+    }
 
     @Bean
     public UserDetailsService userDetailsService(){

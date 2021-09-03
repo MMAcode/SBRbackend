@@ -2,6 +2,8 @@ package makarov.learning.model;
 
 import lombok.*;
 import makarov.learning.security.Authority;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.util.List;
@@ -34,7 +36,14 @@ public class User {
             password;
     // @ElementCollection private List<String>
     //         authorities;
-    @ElementCollection private List<Authority>
+    // @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER) // @LazyCollection(LazyCollectionOption.FALSE)
+    @CollectionTable(name = "authorities", joinColumns = @JoinColumn(name = "username"))
+    // @CollectionTable(joinColumns = @JoinColumn(name = "username"))
+    // @JoinColumn(name="username")
+    @Column(name = "authority")
+    //to match: /Users/mmakarov/.m2/repository/org/springframework/security/spring-security-core/5.5.1/spring-security-core-5.5.1.jar!/org/springframework/security/provisioning/JdbcUserDetailsManager.class
+    private List<Authority>
             authorities;
 
 
