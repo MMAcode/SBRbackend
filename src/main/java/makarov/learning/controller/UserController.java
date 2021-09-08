@@ -29,5 +29,10 @@ public class UserController {
         return userRepository.findByUsername(username);
     }
 
+    @GetMapping(path = "/basicauth")
+    public String helloWorldBean() {
+        //throw new RuntimeException("Some Error has Happened! Contact Support at ***-***");
+        return "You are authenticated";
+    }
 
 }

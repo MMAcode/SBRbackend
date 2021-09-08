@@ -100,8 +100,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .cors().configurationSource(corsUrlSetupMiro())
                 .and()
-                // .httpBasic()
-                    .formLogin().defaultSuccessUrl("/users")
+                .httpBasic()
+                    // .formLogin().defaultSuccessUrl("/users")
                 ;
     }
 
