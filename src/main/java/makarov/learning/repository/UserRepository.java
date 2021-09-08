@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-@CrossOrigin(origins="")
+@CrossOrigin(origins="") // allow everywhere: https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#mvc-cors-global-java
 // @RepositoryRestResource
 // public interface UserRepository extends JpaRepository<User, Long> { - probably not for  mySql
 public interface UserRepository extends CrudRepository<User, Long> {
