@@ -5,6 +5,7 @@ import makarov.learning.security.Authority;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 // @Data
@@ -19,26 +20,40 @@ import java.util.List;
 
 // @Builder
 public class Quiz {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private long
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long
             id;
-    @NonNull private String
+    @NonNull
+    private String
             title;
 
 
-    // @OneToMany()
     @OneToMany(
             // targetEntity=Question.class,
-            // cascade = CascadeType.ALL,
+            // cascade = CascadeType.ALL, // to allow to persist nested entities in constructor
+            cascade = CascadeType.PERSIST, // to allow to persist nested entities in constructor
             // fetch = FetchType.EAGER,
-            // orphanRemoval = true,
-            // mappedBy = "quizs"
+            fetch = FetchType.LAZY,
+            orphanRemoval = true
+            ,mappedBy = "quiz" //omitting this value causes connection table to drop
     )
-    // private List<Question> questions = new ArrayList<>();
-    private List<Question> questions;
+    private List<Question> questions = new ArrayList<>();
 
 
+    public Quiz associateQuestion(Question... q) {
+        Arrays.stream(q).forEach(q1 -> {
+                    q1.setQuiz(this);
+                    questions.add(q1);
+                }
+        );
 
+        return this;
+    }
 
+    public Quiz(@NonNull String title) {
+        this.title = title;
+    }
 
     // @ElementCollection(fetch = FetchType.LAZY) // @LazyCollection(LazyCollectionOption.FALSE)
     // @CollectionTable(name = "quizQuestions")

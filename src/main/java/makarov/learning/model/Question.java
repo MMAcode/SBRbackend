@@ -22,17 +22,23 @@ public class Question {
     @NonNull private String
             title;
 
-
-    @ManyToOne(fetch = FetchType.EAGER)
+    //to include property/entity (-> causing recursion)
+    @ManyToOne(
+            // fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
+            // cascade = CascadeType.ALL
+            cascade = CascadeType.PERSIST,
+            optional = false
+            // ,
+            // targetEntity = Quiz.class,
+    )
+    // @NonNull
     @JoinColumn(
             // name="CUST_ID",
-            // insertable = false
-            // ,
+            // insertable = false, //false breaks the code
             nullable=false,
             updatable=false
     )
-    // @JoinColumn(name="id")
-    // @JoinColumn()
     private Quiz quiz;
 
 

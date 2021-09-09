@@ -103,8 +103,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and().cors() //uncomment to pick up corsFilter bean
                 // .configurationSource(corsUrlSetupMiro()) instead of Cors Bean
                 .and()
-                .httpBasic()
-                    // .formLogin().defaultSuccessUrl("/users")
+                // .httpBasic()
+                    .formLogin().defaultSuccessUrl("/users")
                 .and().rememberMe().key("uniqueAndSecretMiro")
                 ;
     }

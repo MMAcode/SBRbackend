@@ -1,5 +1,6 @@
 package makarov.learning.repository;
 
+import makarov.learning.model.Question;
 import makarov.learning.model.Quiz;
 import makarov.learning.model.User;
 import org.springframework.data.repository.CrudRepository;
