@@ -38,7 +38,10 @@ public class User {
     //         authorities;
     // @ElementCollection
     @ElementCollection(fetch = FetchType.EAGER) // @LazyCollection(LazyCollectionOption.FALSE)
-    @CollectionTable(name = "authorities", joinColumns = @JoinColumn(name = "username"))
+    // @CollectionTable(name = "userAuthorities", joinColumns = @JoinColumn(name = "username"))
+    @CollectionTable(name = "userAuthorities", joinColumns = @JoinColumn(name = "username"))
+    //TODO: rename authorities to userAuthorities
+
     // @CollectionTable(joinColumns = @JoinColumn(name = "username"))
     // @JoinColumn(name="username")
     @Column(name = "authority")

@@ -23,7 +23,7 @@ public class MyUserDetailsService_LoadUserByUsername implements UserDetailsServi
 
         UserDetails ud = new MyUserDetails_UserSecurityDetailsService(u);
         log.info("user {} found",ud.getUsername());
-        log.info("user {} found",ud.getAuthorities());
+        log.info("user's authorities: {}",ud.getAuthorities());
         return ud;
     }
 }

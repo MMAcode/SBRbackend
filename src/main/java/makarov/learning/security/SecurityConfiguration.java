@@ -24,6 +24,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import javax.sql.DataSource;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 // @EnableWebSecurity //to enable WEB security
 @Configuration
@@ -59,21 +61,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return source;
     }
 
-    // @Bean
-    // public CorsFilter corsFilter() {
-    //     // UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    //     // CorsConfiguration config = new CorsConfiguration();
-    //     // config.setAllowCredentials(true);
-    //     // config.addAllowedOrigin("*");
-    //     // config.addAllowedHeader("*");
-    //     // config.addAllowedMethod("OPTIONS");
-    //     // config.addAllowedMethod("GET");
-    //     // config.addAllowedMethod("POST");
-    //     // config.addAllowedMethod("PUT");
-    //     // config.addAllowedMethod("DELETE");
-    //     // source.registerCorsConfiguration("/**", config);
-    //     return new CorsFilter(corsUrlSetupMiro());
-    // }
 
 
     // @Bean
@@ -90,6 +77,22 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     //     return new CorsFilter(source);
     // }
 
+    @Bean
+    public CorsFilter corsFilter() {
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        final CorsConfiguration config = new CorsConfiguration();
+
+        // config.setAllowCredentials(true);
+        // Don't do this in production, use a proper list  of allowed origins
+        config.setAllowedOrigins(Collections.singletonList("*"));
+        // config.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept"));
+        config.setAllowedHeaders(Collections.singletonList("*"));
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "OPTIONS", "DELETE", "PATCH"));
+        source.registerCorsConfiguration("/**", config);
+
+        return new CorsFilter(source);
+    }
+
     @Override //from: https://github.com/in28minutes/spring-boot-react-fullstack-examples/blob/master/spring-boot-react-basic-auth-login-logout/backend-spring-boot-react-basic-auth-login-logout/src/main/java/com/in28minutes/fullstack/springboot/fullstack/basic/authentication/springbootfullstackbasicauthloginlogout/basic/auth/SpringSecurityConfigurationBasicAuth.java
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -97,11 +100,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 // .antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
                 .anyRequest().authenticated()
-                .and()
-                .cors().configurationSource(corsUrlSetupMiro())
+                .and().cors() //uncomment to pick up corsFilter bean
+                // .configurationSource(corsUrlSetupMiro()) instead of Cors Bean
                 .and()
                 .httpBasic()
                     // .formLogin().defaultSuccessUrl("/users")
+                .and().rememberMe().key("uniqueAndSecretMiro")
                 ;
     }
 
