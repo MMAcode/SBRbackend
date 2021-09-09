@@ -36,14 +36,14 @@ public class Quiz {
             // fetch = FetchType.EAGER,
             fetch = FetchType.LAZY,
             orphanRemoval = true
-            ,mappedBy = "quiz" //omitting this value causes connection table to drop
+            // ,mappedBy = "quiz" //omitting this value causes connection table to drop
     )
     private List<Question> questions = new ArrayList<>();
 
 
     public Quiz associateQuestion(Question... q) {
         Arrays.stream(q).forEach(q1 -> {
-                    q1.setQuiz(this);
+                    // q1.setQuiz(this);
                     questions.add(q1);
                 }
         );
