@@ -1,5 +1,7 @@
 package makarov.learning.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,23 +25,27 @@ public class Question {
             title;
 
     // //to include property/entity (-> causing recursion)
-    // @ManyToOne(
-    //         // fetch = FetchType.EAGER,
-    //         fetch = FetchType.LAZY,
-    //         // cascade = CascadeType.ALL
-    //         cascade = CascadeType.PERSIST,
-    //         optional = false
-    //         // ,
-    //         // targetEntity = Quiz.class,
-    // )
+    @ManyToOne(
+            // fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
+            // cascade = CascadeType.ALL
+            cascade = CascadeType.PERSIST,
+            // cascade = CascadeType.DETACH,
+            optional = false
+            // ,
+            // targetEntity = Quiz.class,
+    )
     // // @NonNull
     // @JoinColumn(
-    //         // name="CUST_ID",
-    //         // insertable = false, //false breaks the code
-    //         nullable=false,
-    //         updatable=false
+    //         // name="QUIZ_ID22" //seems working fine with or without this whole annotation
+    //         // ,
+    //         // // insertable = false, //false breaks the code
+    //         // nullable=false,
+    //         // updatable=false
     // )
-    // private Quiz quiz;
+    // @JsonIgnoreProperties({ "quiz" }) //not doing anything
+    @JsonBackReference
+    private Quiz quiz;
 
 
 

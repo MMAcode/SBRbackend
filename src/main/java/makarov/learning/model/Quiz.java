@@ -1,5 +1,6 @@
 package makarov.learning.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import makarov.learning.security.Authority;
 
@@ -8,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-// @Data
 @Getter
 @Setter
 @Entity
@@ -28,7 +28,6 @@ public class Quiz {
     private String
             title;
 
-
     @OneToMany(
             // targetEntity=Question.class,
             // cascade = CascadeType.ALL, // to allow to persist nested entities in constructor
@@ -36,14 +35,15 @@ public class Quiz {
             // fetch = FetchType.EAGER,
             fetch = FetchType.LAZY,
             orphanRemoval = true
-            // ,mappedBy = "quiz" //omitting this value causes connection table to drop
+            ,mappedBy = "quiz" //omitting this value causes connection table to drop
     )
+    @JsonManagedReference
     private List<Question> questions = new ArrayList<>();
 
 
     public Quiz associateQuestion(Question... q) {
         Arrays.stream(q).forEach(q1 -> {
-                    // q1.setQuiz(this);
+                    q1.setQuiz(this);
                     questions.add(q1);
                 }
         );
