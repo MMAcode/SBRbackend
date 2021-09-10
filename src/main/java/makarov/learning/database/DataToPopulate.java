@@ -78,7 +78,7 @@ public class DataToPopulate {
     //     // quizRepository.save(qz1);
     //     // quizRepository.save(qz2);
     //
-    //
+
     //
     //     // //also works
     //     // Question q1 = Question.builder().title("q1").build();
