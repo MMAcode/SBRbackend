@@ -2,9 +2,11 @@ package makarov.learning.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 // @Data
@@ -37,27 +39,24 @@ public class Question {
     )
     // // @NonNull
     // @JoinColumn(
-    //         // name="QUIZ_ID22" //seems working fine with or without this whole annotation
-    //         // ,
-    //         // // insertable = false, //false breaks the code
+    //         name="quiz_id" //seems working fine with or without this whole annotation
+    //
+    //         // insertable = false, //false breaks the code
     //         // nullable=false,
     //         // updatable=false
     // )
     // @JsonIgnoreProperties({ "quiz" }) //not doing anything
     @JsonBackReference
     private Quiz quiz;
+    @Column(insertable = false, updatable = false)
+    private Long quiz_id;
 
-
-
-
-
-    // @ElementCollection(fetch = FetchType.LAZY) // @LazyCollection(LazyCollectionOption.FALSE)
-    // @CollectionTable(name = "quizQuestions")
-    // // @CollectionTable(joinColumns = @JoinColumn(name = "username"))
-    // @JoinColumn(name="id")
-    // @Column(name = "question")
-    // //to match: /Users/mmakarov/.m2/repository/org/springframework/security/spring-security-core/5.5.1/spring-security-core-5.5.1.jar!/org/springframework/security/provisioning/JdbcUserDetailsManager.class
-    // private List<Question>
-    //         questions;
-
+    // @OneToMany(
+    //         cascade = CascadeType.PERSIST, // to allow to persist nested entities in constructor
+    //         fetch = FetchType.LAZY,
+    //         orphanRemoval = true,
+    //         mappedBy = "question" //omitting this value causes connection table to drop
+    // )
+    // @JsonManagedReference
+    // private List<Option> options = new ArrayList<>();
 }
