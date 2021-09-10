@@ -1,5 +1,6 @@
 package makarov.learning.database;
 
+import makarov.learning.model.Choice;
 import makarov.learning.model.Question;
 import makarov.learning.model.Quiz;
 import makarov.learning.model.User;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -28,9 +30,19 @@ public class DataToPopulate {
         userRepository.save(User.builder().firstName("user").lastName("Makarov").password("x3").username("x3").authorities(List.of(Authority.AUTH3)).build());
         userRepository.save(User.builder().firstName("user").lastName("Makarov").password("x12").username("x12").authorities(List.of(Authority.AUTH1, Authority.AUTH2)).build());
         userRepository.save(User.builder().firstName("user").lastName("Makarov").password("x123").username("x123").authorities(List.of(Authority.AUTH1, Authority.AUTH2, Authority.AUTH3)).build());
+
+        //new
+        Choice c1 = Choice.builder().title("ch1").build();
+        Choice c2 = Choice.builder().title("ch2").correctAnswer(true).build();
+        Choice c3 = Choice.builder().title("ch3").build();
+        Choice c4 = Choice.builder().title("ch4").build();
+
+
         // also works
-        Question q1 = Question.builder().title("q1").build();
-        Question q2 = Question.builder().title("q2").build();
+        Question q1 = Question.builder().title("q1").choices(new ArrayList<>()).build();
+        q1.addChoices(c1,c2,c3);
+        Question q2 = Question.builder().title("q2").choices(new ArrayList<>()).build();
+        q2.addChoices(c4);
         Question q3 = Question.builder().title("q3").build();
         Question q4 = Question.builder().title("q4").build();
         Question q5 = Question.builder().title("q5").build();
@@ -40,6 +52,10 @@ public class DataToPopulate {
         quizRepository.save(qz1);
         quizRepository.save(qz2);
 
+        Quiz quiz = quizRepository.findById(1L).get();
+        // quiz.getQuestions().
+        System.out.println();
+        // questionRepository
 
 
 

@@ -1,12 +1,11 @@
 package makarov.learning.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 // @Data
@@ -23,40 +22,38 @@ import java.util.List;
 public class Question {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private long
             id;
+
     @NonNull private String
             title;
 
-    // //to include property/entity (-> causing recursion)
-    @ManyToOne(
-            // fetch = FetchType.EAGER,
-            fetch = FetchType.LAZY,
-            // cascade = CascadeType.ALL
+    @ManyToOne(fetch = FetchType.LAZY,
             cascade = CascadeType.PERSIST,
-            // cascade = CascadeType.DETACH,
-            optional = false
-            // ,
-            // targetEntity = Quiz.class,
-    )
-    // // @NonNull
-    // @JoinColumn(
-    //         name="quiz_id" //seems working fine with or without this whole annotation
-    //
-    //         // insertable = false, //false breaks the code
-    //         // nullable=false,
-    //         // updatable=false
-    // )
-    // @JsonIgnoreProperties({ "quiz" }) //not doing anything
-    @JsonBackReference
-    private Quiz quiz;
-    @Column(insertable = false, updatable = false)
-    private Long quiz_id;
+            optional = false)
+    // @JsonBackReference
+    @JsonIgnore
+    private Quiz
+            quiz;
+    @Column(insertable = false, updatable = false) private Long
+            quiz_id;
 
-    // @OneToMany(
-    //         cascade = CascadeType.PERSIST, // to allow to persist nested entities in constructor
-    //         fetch = FetchType.LAZY,
-    //         orphanRemoval = true,
-    //         mappedBy = "question" //omitting this value causes connection table to drop
-    // )
-    // @JsonManagedReference
-    // private List<Option> options = new ArrayList<>();
+
+
+    @OneToMany(
+            cascade = CascadeType.PERSIST, // to allow to persist nested entities in constructor
+            fetch = FetchType.EAGER,
+            orphanRemoval = true
+            ,mappedBy = "question" //omitting this value causes connection table to drop
+    )
+    @JsonManagedReference
+    private List<Choice>
+            choices = new ArrayList<>();
+
+
+    public void addChoices(Choice... q) {
+        Arrays.stream(q).forEach(q1 -> {
+                    q1.setQuestion(this);
+                    choices.add(q1);
+                }
+        );
+    }
 }
