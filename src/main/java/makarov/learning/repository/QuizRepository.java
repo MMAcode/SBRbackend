@@ -3,6 +3,7 @@ package makarov.learning.repository;
 import makarov.learning.model.Quiz;
 import makarov.learning.model.QuizProjection_NameId;
 import makarov.learning.model.QuizProjection_NoAns;
+import makarov.learning.model.QuizProjection_NoChoices;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -24,9 +25,13 @@ public interface QuizRepository extends CrudRepository<Quiz, Long> {
 
     //FILTERED ENTITIES:
     Collection<QuizProjection_NameId> findBy();
-    // Optional<QuizProjection_NoAns> findById(Long id);
+    // // Optional<QuizProjection_NoAns> findById(Long id);
 
-    // @Query("select q from Quiz where q.id =?1")
+
+    // // @Query("select q from Quiz where q.id =?1")
     Optional<QuizProjection_NoAns> getQuizById(Long id);
+
+    @Query("select q from Quiz q where q.id =?1")
+    Optional<QuizProjection_NoChoices> getQuizWithoutQuestionOptionsById(Long id);
 
 }

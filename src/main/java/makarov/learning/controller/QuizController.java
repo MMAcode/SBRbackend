@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import makarov.learning.model.Quiz;
 import makarov.learning.model.QuizProjection_NameId;
 import makarov.learning.model.QuizProjection_NoAns;
+import makarov.learning.model.QuizProjection_NoChoices;
 import makarov.learning.repository.QuizRepository;
 import makarov.learning.service.QuizUpdater;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,11 @@ public class QuizController {
     @GetMapping("qf/{id}")
     public Optional<QuizProjection_NoAns> getCleanedQuiz (@PathVariable Long id){
         return quizRepository.getQuizById(id);
+    }
+
+    @GetMapping("qfNoChoices/{id}")
+    public Optional<QuizProjection_NoChoices> getCleanedQuiz2 (@PathVariable Long id){
+        return quizRepository.getQuizWithoutQuestionOptionsById(id);
     }
 
 }

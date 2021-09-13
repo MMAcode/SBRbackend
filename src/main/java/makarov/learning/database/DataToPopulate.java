@@ -40,16 +40,16 @@ public class DataToPopulate {
 
 
         // also works
-        Question q1 = Question.builder().title("q1").choices(new ArrayList<>()).build();
+        Question q1 = Question.builder().title("question1").choices(new ArrayList<>()).build();
         q1.addChoices(c1,c2,c3);
-        Question q2 = Question.builder().title("q2").choices(new ArrayList<>()).build();
+        Question q2 = Question.builder().title("question2").choices(new ArrayList<>()).build();
         q2.addChoices(c4);
-        Question q3 = Question.builder().title("q3").build();
-        Question q4 = Question.builder().title("q4").build();
-        Question q5 = Question.builder().title("q5").build();
+        Question q3 = Question.builder().title("question3").build();
+        Question q4 = Question.builder().title("question4").build();
+        Question q5 = Question.builder().title("question5").build();
         // Quiz qz1 = Quiz.builder().title("quiz 1").build();
-        Quiz qz1 = new Quiz("q1").associateQuestion(q1,q2);
-        Quiz qz2 = new Quiz("q2").associateQuestion(q3,q4);
+        Quiz qz1 = new Quiz("quiz1").associateQuestion(q1,q2);
+        Quiz qz2 = new Quiz("quiz2").associateQuestion(q3,q4);
         quizRepository.save(qz1);
         quizRepository.save(qz2);
 
