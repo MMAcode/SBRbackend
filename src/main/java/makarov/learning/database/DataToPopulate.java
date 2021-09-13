@@ -67,8 +67,10 @@ public class DataToPopulate {
         // Question qToUpdate = quiz.getQuestions().stream().filter(q -> q.getId() == 1L).findAny().orElseThrow();
             System.out.println("question with id 1 found in quiz with id 1.");
             Question qToUpdate = quiz.getQuestionBy(1L);
-        qToUpdate.setTitle("Question 2 Updated ");
-        qToUpdate.getChoiceBy(1L).setTitle("updatedChoice");
+
+        // qToUpdate.setTitle("Question 2 Updated ");
+        // qToUpdate.getChoiceBy(1L).setTitle("updatedChoice");
+        quiz.removeQuestionBy(2);
         // qToUpdate.
 
         log.info("before saving quiz");

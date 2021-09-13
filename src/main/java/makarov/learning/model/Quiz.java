@@ -1,6 +1,7 @@
 package makarov.learning.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import javassist.tools.rmi.ObjectNotFoundException;
 import lombok.*;
 import makarov.learning.security.Authority;
 
@@ -56,8 +57,13 @@ public class Quiz {
     }
 
 
-    public Question getQuestionBy(Long id){
+    public Question getQuestionBy(long id){
         return this.getQuestions().stream().filter(q -> q.getId() == id).findAny().orElseThrow();
+    }
+
+    public void removeQuestionBy(long id){
+        if (!this.questions.remove(getQuestionBy(id))) throw new RuntimeException("question with id "+id+" not found in quiz with id " + this.id);
+        // this.getQuestions().stream().filter(q -> q.getId() == id).findAny().orElseThrow();
     }
 
     // @ElementCollection(fetch = FetchType.LAZY) // @LazyCollection(LazyCollectionOption.FALSE)
