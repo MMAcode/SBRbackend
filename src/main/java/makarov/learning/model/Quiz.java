@@ -30,10 +30,10 @@ public class Quiz {
 
     @OneToMany(
             // targetEntity=Question.class,
-            // cascade = CascadeType.ALL, // to allow to persist nested entities in constructor
-            cascade = CascadeType.PERSIST, // to allow to persist nested entities in constructor
-            // fetch = FetchType.EAGER,
-            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL, // to allow to persist nested entities in constructor
+            // cascade = CascadeType.PERSIST, // to allow to persist nested entities in constructor
+            fetch = FetchType.EAGER,
+            // fetch = FetchType.LAZY,
             orphanRemoval = true
             ,mappedBy = "quiz" //omitting this value causes connection table to drop
     )
@@ -53,6 +53,11 @@ public class Quiz {
 
     public Quiz(@NonNull String title) {
         this.title = title;
+    }
+
+
+    public Question getQuestionBy(Long id){
+        return this.getQuestions().stream().filter(q -> q.getId() == id).findAny().orElseThrow();
     }
 
     // @ElementCollection(fetch = FetchType.LAZY) // @LazyCollection(LazyCollectionOption.FALSE)

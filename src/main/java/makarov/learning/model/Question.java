@@ -33,7 +33,7 @@ public class Question {
     @Column(insertable = false, updatable = false) private Long
             quiz_id;
     @OneToMany(
-            cascade = CascadeType.PERSIST, // to allow to persist nested entities in constructor
+            cascade = CascadeType.ALL,
             fetch = FetchType.EAGER,
             orphanRemoval = true
             ,mappedBy = "question" //omitting this value causes connection table to drop
@@ -49,5 +49,9 @@ public class Question {
                     choices.add(q1);
                 }
         );
+    }
+
+    public Choice getChoiceBy(Long id){
+        return this.getChoices().stream().filter(c -> c.getId() == id).findAny().orElseThrow();
     }
 }

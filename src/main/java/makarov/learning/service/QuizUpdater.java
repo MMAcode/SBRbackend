@@ -11,6 +11,6 @@ public class QuizUpdater {
 
     public int updateQuizTitle(String id, String title){
 
-        return quizRepository.update("title updated","1");
+        return quizRepository.updateQuizTitleMM("title updated","1");
     }
 }
