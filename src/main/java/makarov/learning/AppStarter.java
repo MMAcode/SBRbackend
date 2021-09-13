@@ -23,6 +23,6 @@ public class AppStarter implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		helperMethods.printSpringContextBeans();
+		// helperMethods.printSpringContextBeans();
 	}
 }

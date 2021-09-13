@@ -79,34 +79,34 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override //from: https://github.com/in28minutes/spring-boot-react-fullstack-examples/blob/master/spring-boot-react-basic-auth-login-logout/backend-spring-boot-react-basic-auth-login-logout/src/main/java/com/in28minutes/fullstack/springboot/fullstack/basic/authentication/springbootfullstackbasicauthloginlogout/basic/auth/SpringSecurityConfigurationBasicAuth.java
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable() //TODO: for production, must be reconfigured in order to disable only in specific cases. This line was added because without it, HTTP POST requests did not work.
-                .authorizeRequests()
-                // .antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
-                // .antMatchers("/login", "/register").permitAll()
-                // .antMatchers("/users/**").hasAuthority(Authority.AUTH1.toString())
-                .anyRequest().authenticated()
-                .and()
-                    .cors() //uncomment to pick up corsFilter bean
-                    // .configurationSource(corsUrlSetupMiro()) //can be userd instead of currently set Cors Bean
-                .and().httpBasic()
-                    // .formLogin().defaultSuccessUrl("/users")
-                .and().rememberMe()
-                    .key("uniqueAndSecretMiro")
-                    .alwaysRemember(true)
-                    .rememberMeCookieName("rememberMeCookie")
-                    .userDetailsService(userDetailsService())
-                    .and()
-                    // .addFilter(usernamePasswordAuthenticationFilter())
-                    // .addFilter(rememberMeAuthenticationFilter())
-                ;
-
-        // http //no security:
+        // http
         //         .csrf().disable() //TODO: for production, must be reconfigured in order to disable only in specific cases. This line was added because without it, HTTP POST requests did not work.
         //         .authorizeRequests()
-        //         .anyRequest().permitAll()
-        //         .and().cors() //uncomment to pick up corsFilter bean
-        // ;
+        //         // .antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
+        //         // .antMatchers("/login", "/register").permitAll()
+        //         // .antMatchers("/users/**").hasAuthority(Authority.AUTH1.toString())
+        //         .anyRequest().authenticated()
+        //         .and()
+        //             .cors() //uncomment to pick up corsFilter bean
+        //             // .configurationSource(corsUrlSetupMiro()) //can be userd instead of currently set Cors Bean
+        //         .and().httpBasic()
+        //             // .formLogin().defaultSuccessUrl("/users")
+        //         .and().rememberMe()
+        //             .key("uniqueAndSecretMiro")
+        //             .alwaysRemember(true)
+        //             .rememberMeCookieName("rememberMeCookie")
+        //             .userDetailsService(userDetailsService())
+        //             .and()
+        //             // .addFilter(usernamePasswordAuthenticationFilter())
+        //             // .addFilter(rememberMeAuthenticationFilter())
+        //         ;
+
+        http //no security:
+                .csrf().disable() //TODO: for production, must be reconfigured in order to disable only in specific cases. This line was added because without it, HTTP POST requests did not work.
+                .authorizeRequests()
+                .anyRequest().permitAll()
+                .and().cors() //uncomment to pick up corsFilter bean
+        ;
     }
 
 

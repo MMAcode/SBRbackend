@@ -15,10 +15,8 @@ import java.util.List;
 public class Choice {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private long
             id;
-
     @NonNull private String
             title;
-
     @ManyToOne(
             fetch = FetchType.EAGER,
             cascade = CascadeType.PERSIST,
@@ -27,10 +25,5 @@ public class Choice {
             question;
     @Column(insertable = false, updatable = false) private Long
             question_id;
-
     boolean correctAnswer = false;
-
-
-
-
 }

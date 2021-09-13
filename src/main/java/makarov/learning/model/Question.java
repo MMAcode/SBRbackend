@@ -22,22 +22,16 @@ import java.util.List;
 public class Question {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private long
             id;
-
     @NonNull private String
             title;
-
     @ManyToOne(fetch = FetchType.LAZY,
             cascade = CascadeType.PERSIST,
             optional = false)
     // @JsonBackReference
-    @JsonIgnore
-    private Quiz
+    @JsonIgnore private Quiz
             quiz;
     @Column(insertable = false, updatable = false) private Long
             quiz_id;
-
-
-
     @OneToMany(
             cascade = CascadeType.PERSIST, // to allow to persist nested entities in constructor
             fetch = FetchType.EAGER,
