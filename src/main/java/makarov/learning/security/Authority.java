@@ -12,7 +12,7 @@ public enum Authority implements GrantedAuthority {
         this.value = value;
     }
 
-    public String getValue() {
+    public String toString() {
         return value;
     }
 

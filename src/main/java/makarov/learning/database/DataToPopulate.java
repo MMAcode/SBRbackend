@@ -9,6 +9,7 @@ import makarov.learning.repository.QuizRepository;
 import makarov.learning.repository.UserRepository;
 import makarov.learning.security.Authority;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-// @Profile("resetDb")
+@Profile("resetDb")
 public class DataToPopulate {
 
     @Autowired UserRepository userRepository;
@@ -56,6 +57,7 @@ public class DataToPopulate {
         // quiz.getQuestions().
         System.out.println();
         // questionRepository
+        // quizRepository.
 
 
 

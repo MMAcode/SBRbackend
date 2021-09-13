@@ -1,5 +1,6 @@
 package makarov.learning;
 
+import makarov.learning.helpers.HelperMethods;
 import makarov.learning.model.User;
 import makarov.learning.repository.UserRepository;
 import makarov.learning.security.Authority;
@@ -14,6 +15,7 @@ import java.util.List;
 public class AppStarter implements CommandLineRunner {
 
 	@Autowired private UserRepository userRepository;
+	@Autowired HelperMethods helperMethods;
 
 	public static void main(String[] args) {
 		SpringApplication.run(AppStarter.class, args);
@@ -21,9 +23,6 @@ public class AppStarter implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		// userRepository.save(User.builder().firstName("user").lastName("Makarov").username("x1").authorities(List.of(Authority.AUTH1)).build());
-		// userRepository.save(User.builder().firstName("user").lastName("Makarov").username("x2").authorities(List.of(Authority.AUTH2)).build());
-		// userRepository.save(User.builder().firstName("user").lastName("Makarov").username("x12").authorities(List.of(Authority.AUTH1,Authority.AUTH2)).build());
-		// userRepository.save(User.builder().firstName("user").lastName("Makarov").username("x123").authorities(List.of(Authority.AUTH1,Authority.AUTH2,Authority.AUTH3)).build());
+		helperMethods.printSpringContextBeans();
 	}
 }

@@ -14,6 +14,8 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -30,58 +32,21 @@ import java.util.Set;
 // @EnableWebSecurity //to enable WEB security
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-// public class SecurityConfiguration {
 
-
-    public UrlBasedCorsConfigurationSource corsUrlSetupMiro() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration config = new CorsConfiguration();
-
-        // // config.setAllowedHeaders("")
-        // config.setAllowCredentials(true);
-        // config.addAllowedOrigin("*");
-        // config.addAllowedHeader("*");
-        // config.addAllowedMethod("OPTIONS");
-        // config.addAllowedMethod("GET");
-        // config.addAllowedMethod("POST");
-        // config.addAllowedMethod("PUT");
-        // config.addAllowedMethod("DELETE");
-        // source.registerCorsConfiguration("/**", config);
-
-
-
-        // config.setAllowCredentials(true);
-        // Don't do this in production, use a proper list  of allowed origins
-        config.setAllowedOrigins(Collections.singletonList("*"));
-        // config.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept"));
-        config.setAllowedHeaders(Collections.singletonList("*"));
-        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "OPTIONS", "DELETE", "PATCH"));
-        source.registerCorsConfiguration("/**", config);
-
-        return source;
-    }
-
-
-
-    // @Bean
-    // public CorsFilter corsFilter() {
-    //     final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    //     final CorsConfiguration config = new CorsConfiguration();
-    //     // config.setAllowCredentials(true);
-    //     // Don't do this in production, use a proper list  of allowed origins
+    ////CORS:
+    // public UrlBasedCorsConfigurationSource corsUrlSetupMiro() {
+    //     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    //     CorsConfiguration config = new CorsConfiguration();
     //     config.setAllowedOrigins(Collections.singletonList("*"));
-    //     // config.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept"));
     //     config.setAllowedHeaders(Collections.singletonList("*"));
     //     config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "OPTIONS", "DELETE", "PATCH"));
     //     source.registerCorsConfiguration("/**", config);
-    //     return new CorsFilter(source);
+    //     return source;
     // }
-
     @Bean
     public CorsFilter corsFilter() {
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         final CorsConfiguration config = new CorsConfiguration();
-
         // config.setAllowCredentials(true);
         // Don't do this in production, use a proper list  of allowed origins
         config.setAllowedOrigins(Collections.singletonList("*"));
@@ -89,9 +54,28 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         config.setAllowedHeaders(Collections.singletonList("*"));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "OPTIONS", "DELETE", "PATCH"));
         source.registerCorsConfiguration("/**", config);
-
         return new CorsFilter(source);
     }
+
+    ////REMEMBER ME:
+    //https://stackoverflow.com/questions/29563784/issue-with-spring-security-remember-me-token-not-being-set-on-securitycontexthol
+    // @Bean
+    // public UsernamePasswordAuthenticationFilter usernamePasswordAuthenticationFilter()
+    //         throws Exception {
+    //     UsernamePasswordAuthenticationFilter filter =
+    //             new UsernamePasswordAuthenticationFilter();
+    //     filter.setAuthenticationManager(authenticationManager());
+    //     filter.setRememberMeServices(memberUserDetailsService);
+    //     return filter;
+    // }
+    //
+    // @Bean
+    // public RememberMeAuthenticationFilter rememberMeAuthenticationFilter()
+    //         throws Exception {
+    //     RememberMeAuthenticationFilter filter =
+    //             new RememberMeAuthenticationFilter(authenticationManager(), memberUserDetailsService);
+    //     return filter;
+    // }
 
     @Override //from: https://github.com/in28minutes/spring-boot-react-fullstack-examples/blob/master/spring-boot-react-basic-auth-login-logout/backend-spring-boot-react-basic-auth-login-logout/src/main/java/com/in28minutes/fullstack/springboot/fullstack/basic/authentication/springbootfullstackbasicauthloginlogout/basic/auth/SpringSecurityConfigurationBasicAuth.java
     protected void configure(HttpSecurity http) throws Exception {
@@ -99,15 +83,32 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .csrf().disable() //TODO: for production, must be reconfigured in order to disable only in specific cases. This line was added because without it, HTTP POST requests did not work.
                 .authorizeRequests()
                 // .antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
+                // .antMatchers("/login", "/register").permitAll()
+                // .antMatchers("/users/**").hasAuthority(Authority.AUTH1.toString())
                 .anyRequest().authenticated()
-                .and().cors() //uncomment to pick up corsFilter bean
-                // .configurationSource(corsUrlSetupMiro()) instead of Cors Bean
                 .and()
-                // .httpBasic()
-                    .formLogin().defaultSuccessUrl("/users")
-                .and().rememberMe().key("uniqueAndSecretMiro")
+                    .cors() //uncomment to pick up corsFilter bean
+                    // .configurationSource(corsUrlSetupMiro()) //can be userd instead of currently set Cors Bean
+                .and().httpBasic()
+                    // .formLogin().defaultSuccessUrl("/users")
+                .and().rememberMe()
+                    .key("uniqueAndSecretMiro")
+                    .alwaysRemember(true)
+                    .rememberMeCookieName("rememberMeCookie")
+                    .userDetailsService(userDetailsService())
+                    .and()
+                    // .addFilter(usernamePasswordAuthenticationFilter())
+                    // .addFilter(rememberMeAuthenticationFilter())
                 ;
+
+        // http //no security:
+        //         .csrf().disable() //TODO: for production, must be reconfigured in order to disable only in specific cases. This line was added because without it, HTTP POST requests did not work.
+        //         .authorizeRequests()
+        //         .anyRequest().permitAll()
+        //         .and().cors() //uncomment to pick up corsFilter bean
+        // ;
     }
+
 
     // @Autowired
     // DataSource dataSource; //by default pointing to H2
@@ -118,9 +119,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                ;
     }
 
+    @Autowired MyUserDetailsService_LoadUserByUsername myUserDetailsService_loadUserByUsername;
     @Bean
     public UserDetailsService userDetailsService(){
-        return new MyUserDetailsService_LoadUserByUsername();
+        // return new MyUserDetailsService_LoadUserByUsername();
+        return myUserDetailsService_loadUserByUsername;
     }
 
     // @Autowired DataSource dataSource;

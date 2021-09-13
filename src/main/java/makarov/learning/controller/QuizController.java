@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import makarov.learning.model.Quiz;
 import makarov.learning.repository.QuestionRepository;
 import makarov.learning.repository.QuizRepository;
+import makarov.learning.service.QuizUpdater;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +19,8 @@ import java.util.Optional;
 public class QuizController {
     @Autowired
     QuizRepository quizRepository;
+    @Autowired
+    QuizUpdater quizUpdater;
 
     @GetMapping("quizzes")
     public Iterable<Quiz> getQuizzes(){
@@ -29,6 +32,7 @@ public class QuizController {
     public Optional<Quiz> getUser(@PathVariable Long id){
         return quizRepository.findById(id);
     }
+
 
 
 
