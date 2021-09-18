@@ -26,19 +26,22 @@ public class Question {
             title;
     @ManyToOne(fetch = FetchType.LAZY,
             cascade = CascadeType.PERSIST,
-            optional = false)
+            optional = true)
     // @JsonBackReference
-    @JsonIgnore private Quiz
+    // @JsonIgnoreProperties({"quiz_id","quiz","quizzes"})
+    @JsonIgnore
+    // @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
+    private Quiz
             quiz;
-    @Column(insertable = false, updatable = false) private Long
-            quiz_id;
+    // @Column(insertable = false, updatable = false) private Long
+    //         quiz_id;
     @OneToMany(
             cascade = CascadeType.ALL,
             fetch = FetchType.EAGER,
             orphanRemoval = true
             ,mappedBy = "question" //omitting this value causes connection table to drop
     )
-    @JsonManagedReference
+    // @JsonManagedReference
     private List<Choice>
             choices = new ArrayList<>();
 
@@ -52,6 +55,10 @@ public class Question {
     }
 
     public Choice getChoiceBy(Long id){
-        return this.getChoices().stream().filter(c -> c.getId() == id).findAny().orElseThrow();
+        return this.getChoices().stream().filter(c -> c.getId() == id).findAny().orElseThrow(()->new RuntimeException("choice with id "+id+" not found in question with id " + this.id));
+    }
+
+    public void removeChoiceBy(long id){
+        choices.remove(getChoiceBy(id));
     }
 }

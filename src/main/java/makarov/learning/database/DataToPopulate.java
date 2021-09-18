@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 @Slf4j
 @Component
-// @Profile("resetDb")
+@Profile("resetDb")
 public class DataToPopulate {
 
     @Autowired
@@ -45,41 +45,40 @@ public class DataToPopulate {
 
 
         // also works
-        Question q1 = Question.builder().title("question1").choices(new ArrayList<>()).build();
+        Question q1 = Question.builder().title("questionA").choices(new ArrayList<>()).build();
         q1.addChoices(c1, c2, c3);
-        Question q2 = Question.builder().title("question2").choices(new ArrayList<>()).build();
+        Question q2 = Question.builder().title("questionB").choices(new ArrayList<>()).build();
         q2.addChoices(c4);
-        Question q3 = Question.builder().title("question3").build();
-        Question q4 = Question.builder().title("question4").build();
-        Question q5 = Question.builder().title("question5").build();
+        Question q3 = Question.builder().title("questionC").build();
+        Question q4 = Question.builder().title("questionD").build();
+        Question q5 = Question.builder().title("questionE").build();
         // Quiz qz1 = Quiz.builder().title("quiz 1").build();
         Quiz qz1 = new Quiz("quiz1").associateQuestion(q1, q2);
         Quiz qz2 = new Quiz("quiz2").associateQuestion(q3, q4);
-        // quizRepository.save(qz1);
-        // quizRepository.save(qz2);
+        quizRepository.save(qz1);
+        quizRepository.save(qz2);
 
         //UPDATING:
-        // q2.setTitle("Question 2 Updated0");
-        // quizRepository.save(qz1);
-
-        Quiz quiz = quizRepository.findById(1L).get();
-        // quiz.setId(27);
-        // Question qToUpdate = quiz.getQuestions().stream().filter(q -> q.getId() == 1L).findAny().orElseThrow();
-            System.out.println("question with id 1 found in quiz with id 1.");
-            Question qToUpdate = quiz.getQuestionBy(1L);
-
-        // qToUpdate.setTitle("Question 2 Updated ");
-        // qToUpdate.getChoiceBy(1L).setTitle("updatedChoice");
-        quiz.removeQuestionBy(2);
-        // qToUpdate.
-
-        log.info("before saving quiz");
-        quizRepository.save(quiz);
-
-        // // quiz.getQuestions().
-        // System.out.println();
-        // // questionRepository
-        // // quizRepository.
+        // // q2.setTitle("Question 2 Updated0");
+        // // quizRepository.save(qz1);
+        //
+        // Quiz quiz = quizRepository.findById(1L).get();
+        // // quiz.setId(27);
+        // // Question qToUpdate = quiz.getQuestions().stream().filter(q -> q.getId() == 1L).findAny().orElseThrow();
+        //     System.out.println("question with id 1 found in quiz with id 1.");
+        //     Question qToUpdate = quiz.getQuestionBy(1);
+        //
+        // // qToUpdate.setTitle("Question 2 Updated ");
+        // // qToUpdate.getChoiceBy(1L).setTitle("updatedChoice");
+        // // quiz.removeQuestionBy(2);
+        //
+        // log.info("before saving quiz");
+        // quizRepository.save(quiz);
+        //
+        // // // quiz.getQuestions().
+        // // System.out.println();
+        // // // questionRepository
+        // // // quizRepository.
 
 
 

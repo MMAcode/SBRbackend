@@ -1,6 +1,7 @@
 package makarov.learning.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -21,9 +22,11 @@ public class Choice {
             fetch = FetchType.EAGER,
             cascade = CascadeType.PERSIST,
             optional = false)
-    @JsonBackReference private Question
-            question;
-    @Column(insertable = false, updatable = false) private Long
-            question_id;
+    // @JsonBackReference
+    @JsonIgnore
+    private Question
+        question;
+    // @Column(insertable = false, updatable = false) private Long
+    //         question_id;
     boolean correctAnswer = false;
 }

@@ -38,7 +38,7 @@ public class Quiz {
             orphanRemoval = true
             ,mappedBy = "quiz" //omitting this value causes connection table to drop
     )
-    @JsonManagedReference
+    // @JsonManagedReference
     private List<Question> questions = new ArrayList<>();
 
 
@@ -56,14 +56,12 @@ public class Quiz {
         this.title = title;
     }
 
-
     public Question getQuestionBy(long id){
-        return this.getQuestions().stream().filter(q -> q.getId() == id).findAny().orElseThrow();
+        return this.getQuestions().stream().filter(q -> q.getId() == id).findAny().orElseThrow(()-> new RuntimeException("question with id "+id+" not found in quiz with id " + this.id));
     }
 
     public void removeQuestionBy(long id){
-        if (!this.questions.remove(getQuestionBy(id))) throw new RuntimeException("question with id "+id+" not found in quiz with id " + this.id);
-        // this.getQuestions().stream().filter(q -> q.getId() == id).findAny().orElseThrow();
+        questions.remove(getQuestionBy(id));
     }
 
     // @ElementCollection(fetch = FetchType.LAZY) // @LazyCollection(LazyCollectionOption.FALSE)

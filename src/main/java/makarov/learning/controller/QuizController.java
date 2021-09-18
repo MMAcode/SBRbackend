@@ -8,10 +8,7 @@ import makarov.learning.model.QuizProjection_NoChoices;
 import makarov.learning.repository.QuizRepository;
 import makarov.learning.service.QuizUpdater;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -36,6 +33,12 @@ public class QuizController {
         return quizRepository.findById(id);
     }
 
+    @PostMapping("quiz/update")
+    // @ResponseBody // tells a controller that the object returned is automatically serialized into JSON and passed back into the HttpResponse object.
+    public void updateQuiz(@RequestBody Quiz xx){
+        System.out.println(xx);
+         // quizRepository.save(quiz);
+    }
     //FILTERED ENTITIES:
     @GetMapping("qf")
     public Collection<QuizProjection_NameId> findFiltered(){
