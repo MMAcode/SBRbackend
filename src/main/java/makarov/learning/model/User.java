@@ -17,8 +17,6 @@ import java.util.List;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 @ToString
-
-// @Builder
 public class User {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private long
             id;

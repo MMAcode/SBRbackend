@@ -42,11 +42,25 @@ public class Quiz {// @Table(name="quizs")
 
         return this;
     }
-    public void associateAllExistingQuestionsAndChoices(){
+    public Quiz associateAllExistingQuestionsAndChoices(){
         this.questions.forEach(question-> {
             question.setQuiz(this);
             question.associateAllExistingChoices();
         });
+        return this;
+    }
+
+    public Quiz addQuestionsPositionsIfNeeded(){
+        // this.getQuestions().forEach((q,p)->{});
+        int positionFrom0 = 0;
+        for (Question q :this.getQuestions()){
+            if (q.getPositionFrom0()<0) {
+                q.setPositionFrom0(positionFrom0++);
+                System.out.println();
+
+            }
+        }
+        return this;
     }
 
     public Quiz(@NonNull String title) {

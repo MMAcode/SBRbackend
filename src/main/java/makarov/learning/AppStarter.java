@@ -2,6 +2,7 @@ package makarov.learning;
 
 import makarov.learning.helpers.HelperMethods;
 import makarov.learning.model.User;
+import makarov.learning.repository.QuizRepository;
 import makarov.learning.repository.UserRepository;
 import makarov.learning.security.Authority;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import java.util.List;
 public class AppStarter implements CommandLineRunner {
 
 	@Autowired private UserRepository userRepository;
+	// @Autowired private QuizRepository quizRepository;
 	@Autowired HelperMethods helperMethods;
 
 	public static void main(String[] args) {
@@ -24,5 +26,6 @@ public class AppStarter implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		// helperMethods.printSpringContextBeans();
+
 	}
 }

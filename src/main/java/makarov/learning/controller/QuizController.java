@@ -38,6 +38,7 @@ public class QuizController {
     public void updateQuiz(@RequestBody Quiz quiz){
         System.out.println(quiz);
         quiz.associateAllExistingQuestionsAndChoices();
+        quiz.addQuestionsPositionsIfNeeded();
         quizRepository.save(quiz);
     }
     //FILTERED ENTITIES:

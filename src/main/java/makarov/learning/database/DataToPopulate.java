@@ -4,15 +4,20 @@ import lombok.extern.slf4j.Slf4j;
 import makarov.learning.model.Choice;
 import makarov.learning.model.Question;
 import makarov.learning.model.Quiz;
+import makarov.learning.model.User;
 import makarov.learning.repository.QuestionRepository;
 import makarov.learning.repository.QuizRepository;
 import makarov.learning.repository.UserRepository;
+import makarov.learning.security.Authority;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Component
@@ -27,8 +32,12 @@ public class DataToPopulate {
     QuestionRepository questionRepository;
 
     @PostConstruct
+    private void handleData(){
+        populateDbWithData();
+        updateData();
+    }
     private void populateDbWithData() {
-        log.info("Hi from DataToPopulate");
+        // log.info("Hi from DataToPopulate");
         // userRepository.save(User.builder().firstName("user").lastName("Makarov").password("x1").username("x1").authorities(List.of(Authority.AUTH1)).build());
         // userRepository.save(User.builder().firstName("user").lastName("Makarov").password("x2").username("x2").authorities(List.of(Authority.AUTH2)).build());
         // userRepository.save(User.builder().firstName("user").lastName("Makarov").password("x3").username("x3").authorities(List.of(Authority.AUTH3)).build());
@@ -46,37 +55,44 @@ public class DataToPopulate {
         Question q1 = Question.builder().title("questionA").choices(new ArrayList<>()).build();
         q1.associateExternalChoices(c1, c2, c3);
         Question q2 = Question.builder().title("questionB").choices(new ArrayList<>()).build();
-        q2.associateExternalChoices(c4);
+        q2.associateExternalChoices(c1, c2, c3, c4);
         Question q3 = Question.builder().title("questionC").build();
         Question q4 = Question.builder().title("questionD").build();
         Question q5 = Question.builder().title("questionE").build();
+
         // Quiz qz1 = Quiz.builder().title("quiz 1").build();
-        Quiz qz1 = new Quiz("quiz1").associateQuestion(q1, q2);
-        Quiz qz2 = new Quiz("quiz2").associateQuestion(q3, q4);
+        Quiz qz1 = new Quiz("quiz1").associateQuestion(q1, q2).addQuestionsPositionsIfNeeded();
+        Quiz qz2 = new Quiz("quiz2").associateQuestion(q3, q4).addQuestionsPositionsIfNeeded();
         quizRepository.save(qz1);
         quizRepository.save(qz2);
+    }
 
-        //UPDATING:
+    private void updateData(){
+        // // UPDATING:
         // // q2.setTitle("Question 2 Updated0");
         // // quizRepository.save(qz1);
         //
         // Quiz quiz = quizRepository.findById(1L).get();
+        // // quizRepository.findById(1L).get();
+        // log.info("quiz1 question 1 choice 1 id: {}",quiz.getQuestions().get(0).getChoices().get(0).getId());
+        //
+        // // quizRepository.findById(1L).get();
         // // quiz.setId(27);
         // // Question qToUpdate = quiz.getQuestions().stream().filter(q -> q.getId() == 1L).findAny().orElseThrow();
         //     System.out.println("question with id 1 found in quiz with id 1.");
         //     Question qToUpdate = quiz.getQuestionBy(1);
-        //
-        // // qToUpdate.setTitle("Question 2 Updated ");
-        // // qToUpdate.getChoiceBy(1L).setTitle("updatedChoice");
-        // // quiz.removeQuestionBy(2);
-        //
-        // log.info("before saving quiz");
+
+        // qToUpdate.setTitle("Question 2 Updated ");
+        // qToUpdate.getChoiceBy(1L).setTitle("updatedChoice");
+        // quiz.removeQuestionBy(2);
+
+        // swapChoices12InQuestion1InQuiz(quiz);
         // quizRepository.save(quiz);
-        //
-        // // // quiz.getQuestions().
-        // // System.out.println();
-        // // // questionRepository
-        // // // quizRepository.
+
+        // // quiz.getQuestions().
+        // System.out.println();
+        // // questionRepository
+        // // quizRepository.
 
 
 
@@ -120,5 +136,11 @@ public class DataToPopulate {
         //     // quizRepository.save(qz2);
         //
 
+    }
+
+    private void swapChoices12InQuestion1InQuiz(Quiz quiz) {
+        // Choice c1 = quiz.getQuestions().get(0).getChoices().get(0);
+        List<Choice> lc = quiz.getQuestions().get(0).getChoices();
+        Collections.swap(lc,0,1);
     }
 }
