@@ -5,8 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Arrays;
-import java.util.List;
 
 @Entity
 @Getter @Setter @ToString
@@ -22,11 +20,8 @@ public class Choice {
             fetch = FetchType.EAGER,
             cascade = CascadeType.PERSIST,
             optional = false)
-    // @JsonBackReference
     @JsonIgnore
     private Question
         question;
-    // @Column(insertable = false, updatable = false) private Long
-    //         question_id;
     boolean correctAnswer = false;
 }

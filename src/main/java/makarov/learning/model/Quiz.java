@@ -13,14 +13,11 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-// @Table(name="quizs")
 @NoArgsConstructor //needed for JPA?
 @AllArgsConstructor // needed to use builder well
 @Builder(toBuilder = true)
 @ToString
-
-// @Builder
-public class Quiz {
+public class Quiz {// @Table(name="quizs")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long
@@ -31,13 +28,10 @@ public class Quiz {
 
     @OneToMany(
             cascade = CascadeType.ALL, // to allow to persist nested entities in constructor
-            // fetch = FetchType.EAGER,
             orphanRemoval = true
             ,mappedBy = "quiz" //omitting this value causes connection table to drop
     )
-    // @JsonManagedReference
     private List<Question> questions = new ArrayList<>();
-
 
     public Quiz associateQuestion(Question... q) {
         Arrays.stream(q).forEach(q1 -> {
