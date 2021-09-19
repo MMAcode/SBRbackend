@@ -30,11 +30,8 @@ public class Quiz {
             title;
 
     @OneToMany(
-            // targetEntity=Question.class,
             cascade = CascadeType.ALL, // to allow to persist nested entities in constructor
-            // cascade = CascadeType.PERSIST, // to allow to persist nested entities in constructor
-            fetch = FetchType.EAGER,
-            // fetch = FetchType.LAZY,
+            // fetch = FetchType.EAGER,
             orphanRemoval = true
             ,mappedBy = "quiz" //omitting this value causes connection table to drop
     )
@@ -50,6 +47,12 @@ public class Quiz {
         );
 
         return this;
+    }
+    public void associateAllExistingQuestionsAndChoices(){
+        this.questions.forEach(question-> {
+            question.setQuiz(this);
+            question.associateAllExistingChoices();
+        });
     }
 
     public Quiz(@NonNull String title) {

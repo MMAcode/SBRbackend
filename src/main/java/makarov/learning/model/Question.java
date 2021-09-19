@@ -24,9 +24,12 @@ public class Question {
             id;
     @NonNull private String
             title;
-    @ManyToOne(fetch = FetchType.LAZY,
-            cascade = CascadeType.PERSIST,
-            optional = true)
+
+    @ManyToOne(fetch = FetchType.LAZY
+        // ,
+            // cascade = CascadeType.PERSIST,
+            // optional = true
+    )
     // @JsonBackReference
     // @JsonIgnoreProperties({"quiz_id","quiz","quizzes"})
     @JsonIgnore
@@ -46,13 +49,20 @@ public class Question {
             choices = new ArrayList<>();
 
 
-    public void addChoices(Choice... q) {
-        Arrays.stream(q).forEach(q1 -> {
-                    q1.setQuestion(this);
-                    choices.add(q1);
+    public void associateExternalChoices(Choice... choices) {
+        Arrays.stream(choices).forEach(choice -> {
+                    choice.setQuestion(this);
+                    this.choices.add(choice);
                 }
         );
     }
+
+    public void associateAllExistingChoices(){
+        this.choices.forEach(choice-> {
+            choice.setQuestion(this);
+        });
+    }
+
 
     public Choice getChoiceBy(Long id){
         return this.getChoices().stream().filter(c -> c.getId() == id).findAny().orElseThrow(()->new RuntimeException("choice with id "+id+" not found in question with id " + this.id));

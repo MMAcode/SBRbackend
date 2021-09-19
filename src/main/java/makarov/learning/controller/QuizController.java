@@ -35,9 +35,10 @@ public class QuizController {
 
     @PostMapping("quiz/update")
     // @ResponseBody // tells a controller that the object returned is automatically serialized into JSON and passed back into the HttpResponse object.
-    public void updateQuiz(@RequestBody Quiz xx){
-        System.out.println(xx);
-         // quizRepository.save(quiz);
+    public void updateQuiz(@RequestBody Quiz quiz){
+        System.out.println(quiz);
+        quiz.associateAllExistingQuestionsAndChoices();
+        quizRepository.save(quiz);
     }
     //FILTERED ENTITIES:
     @GetMapping("qf")

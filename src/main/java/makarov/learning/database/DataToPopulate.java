@@ -4,18 +4,16 @@ import lombok.extern.slf4j.Slf4j;
 import makarov.learning.model.Choice;
 import makarov.learning.model.Question;
 import makarov.learning.model.Quiz;
-import makarov.learning.model.User;
 import makarov.learning.repository.QuestionRepository;
 import makarov.learning.repository.QuizRepository;
 import makarov.learning.repository.UserRepository;
-import makarov.learning.security.Authority;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
-import java.util.List;
+
 @Slf4j
 @Component
 @Profile("resetDb")
@@ -46,9 +44,9 @@ public class DataToPopulate {
 
         // also works
         Question q1 = Question.builder().title("questionA").choices(new ArrayList<>()).build();
-        q1.addChoices(c1, c2, c3);
+        q1.associateExternalChoices(c1, c2, c3);
         Question q2 = Question.builder().title("questionB").choices(new ArrayList<>()).build();
-        q2.addChoices(c4);
+        q2.associateExternalChoices(c4);
         Question q3 = Question.builder().title("questionC").build();
         Question q4 = Question.builder().title("questionD").build();
         Question q5 = Question.builder().title("questionE").build();
