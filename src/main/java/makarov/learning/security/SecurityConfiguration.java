@@ -14,8 +14,10 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
+import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter;
+import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -57,8 +59,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new CorsFilter(source);
     }
 
-    ////REMEMBER ME:
-    //https://stackoverflow.com/questions/29563784/issue-with-spring-security-remember-me-token-not-being-set-on-securitycontexthol
+    // ////REMEMBER ME:
+    // //https://stackoverflow.com/questions/29563784/issue-with-spring-security-remember-me-token-not-being-set-on-securitycontexthol
     // @Bean
     // public UsernamePasswordAuthenticationFilter usernamePasswordAuthenticationFilter()
     //         throws Exception {
@@ -76,37 +78,57 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     //             new RememberMeAuthenticationFilter(authenticationManager(), memberUserDetailsService);
     //     return filter;
     // }
+    // private static String rememberMeKey = "uniqueAndSecretMiro";
+    //
+    // @Bean
+    // public RememberMeServices rememberMeServices() throws Exception {
+    //     TokenBasedRememberMeServices rms = new TokenBasedRememberMeServices(rememberMeKey, userDetailsService());
+    //     rms.setAlwaysRemember(true);
+    //     rms.setCookieName("signin");
+    //     // rms.setUseSecureCookie(env.acceptsProfiles("cloud"));
+    //     rms.setUseSecureCookie(false);
+    //     return rms;
+    // }
 
-    @Override //from: https://github.com/in28minutes/spring-boot-react-fullstack-examples/blob/master/spring-boot-react-basic-auth-login-logout/backend-spring-boot-react-basic-auth-login-logout/src/main/java/com/in28minutes/fullstack/springboot/fullstack/basic/authentication/springbootfullstackbasicauthloginlogout/basic/auth/SpringSecurityConfigurationBasicAuth.java
+
+    @Override
+    //from: https://github.com/in28minutes/spring-boot-react-fullstack-examples/blob/master/spring-boot-react-basic-auth-login-logout/backend-spring-boot-react-basic-auth-login-logout/src/main/java/com/in28minutes/fullstack/springboot/fullstack/basic/authentication/springbootfullstackbasicauthloginlogout/basic/auth/SpringSecurityConfigurationBasicAuth.java
     protected void configure(HttpSecurity http) throws Exception {
-        // http
+        http
+            .csrf().disable() //TODO: for production, must be reconfigured in order to disable only in specific cases. This line was added because without it, HTTP POST requests did not work.
+            .authorizeRequests()
+            // .antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
+            // .antMatchers("/login", "/register").permitAll()
+            // .antMatchers("/users/**").hasAuthority(Authority.AUTH1.toString())
+            .anyRequest().authenticated()
+            .and()
+            .cors() //uncomment to pick up corsFilter bean
+            // .configurationSource(corsUrlSetupMiro()) //can be userd instead of currently set Cors Bean
+            .and()
+
+            .httpBasic()
+
+        // .formLogin().defaultSuccessUrl("/users")
+
+        // //REMEMBER ME:
+        //with httpBasic: https://gist.github.com/cbeams/f3c36caae7046b03609a
+        // .and().rememberMe()
+        //     .key(rememberMeKey)
+        //     .rememberMeServices(rememberMeServices())
+        // //     .alwaysRemember(true)
+        // //     .rememberMeCookieName("rememberMeCookie")
+        // //     .userDetailsService(userDetailsService())
+        // // .and()
+        // // .addFilter(usernamePasswordAuthenticationFilter())
+        // // .addFilter(rememberMeAuthenticationFilter())
+        ;
+
+        // http //no security:
         //         .csrf().disable() //TODO: for production, must be reconfigured in order to disable only in specific cases. This line was added because without it, HTTP POST requests did not work.
         //         .authorizeRequests()
-        //         // .antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
-        //         // .antMatchers("/login", "/register").permitAll()
-        //         // .antMatchers("/users/**").hasAuthority(Authority.AUTH1.toString())
-        //         .anyRequest().authenticated()
-        //         .and()
-        //             .cors() //uncomment to pick up corsFilter bean
-        //             // .configurationSource(corsUrlSetupMiro()) //can be userd instead of currently set Cors Bean
-        //         .and().httpBasic()
-        //             // .formLogin().defaultSuccessUrl("/users")
-        //         .and().rememberMe()
-        //             .key("uniqueAndSecretMiro")
-        //             .alwaysRemember(true)
-        //             .rememberMeCookieName("rememberMeCookie")
-        //             .userDetailsService(userDetailsService())
-        //             .and()
-        //             // .addFilter(usernamePasswordAuthenticationFilter())
-        //             // .addFilter(rememberMeAuthenticationFilter())
-        //         ;
-
-        http //no security:
-                .csrf().disable() //TODO: for production, must be reconfigured in order to disable only in specific cases. This line was added because without it, HTTP POST requests did not work.
-                .authorizeRequests()
-                .anyRequest().permitAll()
-                .and().cors() //uncomment to pick up corsFilter bean
-        ;
+        //         .anyRequest().permitAll()
+        //         .and().cors() //uncomment to pick up corsFilter bean
+        // ;
     }
 
 
@@ -116,12 +138,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         // auth.jdbcAuthentication().dataSource(dataSource); //connect to specific database
         auth.userDetailsService(userDetailsService())
-               ;
+        ;
     }
 
-    @Autowired MyUserDetailsService_LoadUserByUsername myUserDetailsService_loadUserByUsername;
+    @Autowired
+    MyUserDetailsService_LoadUserByUsername myUserDetailsService_loadUserByUsername;
+
     @Bean
-    public UserDetailsService userDetailsService(){
+    public UserDetailsService userDetailsService() {
         // return new MyUserDetailsService_LoadUserByUsername();
         return myUserDetailsService_loadUserByUsername;
     }
@@ -158,10 +182,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
      * then createUser (userDetailsManager.createUser(user))
      */
     // }
-    public PasswordEncoder getPasswordEncoder(){
+    public PasswordEncoder getPasswordEncoder() {
         return NoOpPasswordEncoder.getInstance();
     }
-
 
 
     // @Override
@@ -196,8 +219,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     //                     .roles(Role.ADMIN.getValue())
     //             );
     // }
-
-
 
 
 }
