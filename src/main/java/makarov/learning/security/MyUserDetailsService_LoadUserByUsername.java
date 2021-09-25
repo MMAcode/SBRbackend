@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 @Slf4j
 @Component
 public class MyUserDetailsService_LoadUserByUsername implements UserDetailsService {
@@ -23,7 +25,13 @@ public class MyUserDetailsService_LoadUserByUsername implements UserDetailsServi
 
         UserDetails ud = new MyUserDetails_UserSecurityDetailsService(u);
         log.info("user {} found",ud.getUsername());
-        log.info("user's authorities: {}",ud.getAuthorities());
+
+        String authorities = ud.getAuthorities()
+            .stream()
+            .map(a->a.getAuthority())
+            .collect(Collectors.joining(", "));
+        // String authorities = ud.getAuthorities().stream().map(a->a.getAuthority()).collect(Collectors.joining(", "));
+        log.info("user's authorities: {}",authorities);
         return ud;
     }
 }

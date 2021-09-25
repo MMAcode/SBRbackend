@@ -46,9 +46,10 @@ public class User {
     // @JoinColumn(name="username")
     @Column(name = "authority")
     //to match: /Users/mmakarov/.m2/repository/org/springframework/security/spring-security-core/5.5.1/spring-security-core-5.5.1.jar!/org/springframework/security/provisioning/JdbcUserDetailsManager.class
-    private List<Authority>
-            authorities;
-
+    // private List<Authority>
+    //         authorities;
+    private List<String>
+        authorities;
 
     // public User(){}
 

@@ -17,7 +17,6 @@ import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Component
@@ -34,15 +33,22 @@ public class DataToPopulate {
     @PostConstruct
     private void handleData(){
         populateDbWithData();
-        updateData();
+        // updateData();
     }
     private void populateDbWithData() {
-        // log.info("Hi from DataToPopulate");
+        log.info("Hi from DataToPopulate");
         // userRepository.save(User.builder().firstName("user").lastName("Makarov").password("x1").username("x1").authorities(List.of(Authority.AUTH1)).build());
         // userRepository.save(User.builder().firstName("user").lastName("Makarov").password("x2").username("x2").authorities(List.of(Authority.AUTH2)).build());
         // userRepository.save(User.builder().firstName("user").lastName("Makarov").password("x3").username("x3").authorities(List.of(Authority.AUTH3)).build());
         // userRepository.save(User.builder().firstName("user").lastName("Makarov").password("x12").username("x12").authorities(List.of(Authority.AUTH1, Authority.AUTH2)).build());
         // userRepository.save(User.builder().firstName("user").lastName("Makarov").password("x123").username("x123").authorities(List.of(Authority.AUTH1, Authority.AUTH2, Authority.AUTH3)).build());
+
+        userRepository.save(User.builder().firstName("user").lastName("Makarov").password("x1").username("x1").authorities(List.of(Authority.user.getAuthority())).build());
+        userRepository.save(User.builder().firstName("user").lastName("Makarov").password("x2").username("x2").authorities(List.of(Authority.manager.getAuthority())).build());
+        userRepository.save(User.builder().firstName("user").lastName("Makarov").password("x3").username("x3").authorities(List.of(Authority.admin.getAuthority())).build());
+        userRepository.save(User.builder().firstName("user").lastName("Makarov").password("x12").username("x12").authorities(List.of(Authority.user.getAuthority(), Authority.manager.getAuthority())).build());
+        userRepository.save(User.builder().firstName("user").lastName("Makarov").password("x123").username("x123").authorities(List.of(Authority.user.getAuthority(), Authority.manager.getAuthority(), Authority.admin.getAuthority())).build());
+
 
         //new
         Choice c1 = Choice.builder().title("ch1").build();

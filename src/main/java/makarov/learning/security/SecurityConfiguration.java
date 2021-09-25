@@ -7,6 +7,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -31,7 +32,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-// @EnableWebSecurity //to enable WEB security
+@EnableWebSecurity //to enable WEB security
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
@@ -94,13 +95,42 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     //from: https://github.com/in28minutes/spring-boot-react-fullstack-examples/blob/master/spring-boot-react-basic-auth-login-logout/backend-spring-boot-react-basic-auth-login-logout/src/main/java/com/in28minutes/fullstack/springboot/fullstack/basic/authentication/springbootfullstackbasicauthloginlogout/basic/auth/SpringSecurityConfigurationBasicAuth.java
     protected void configure(HttpSecurity http) throws Exception {
+
+        // http
+        //     .httpBasic().and()
+        //     .csrf().disable() //TODO: for production, must be reconfigured in order to disable only in specific cases. This line was added because without it, HTTP POST requests did not work.
+        //     .authorizeRequests()
+        //     .antMatchers(HttpMethod.POST).hasAnyRole("user","manager","admin")
+        //     // .and().httpBasic()
+        //     // .anyRequest().authenticated()
+        //     .and()
+        //     .cors() //uncomment to pick up corsFilter bean
+        //     // .configurationSource(corsUrlSetupMiro()) //can be userd instead of currently set Cors Bean
+        //     .and()
+        //
+        //     .httpBasic()
+        // ;
+
+
         http
             .csrf().disable() //TODO: for production, must be reconfigured in order to disable only in specific cases. This line was added because without it, HTTP POST requests did not work.
             .authorizeRequests()
             // .antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
             // .antMatchers("/login", "/register").permitAll()
             // .antMatchers("/users/**").hasAuthority(Authority.AUTH1.toString())
+            // .antMatchers(HttpMethod.POST).hasRole(Role.ADMIN.getValue())
+            // .antMatchers(HttpMethod.POST).hasRole(Authority.admin.getAuthority())
+            // .antMatchers(HttpMethod.POST,"/quiz/update").hasRole("admin")
+            // .antMatchers(HttpMethod.POST,"/quiz/update").permitAll() //worked
+            // .antMatchers(HttpMethod.GET).hasAnyRole("user","manager","admin")
+            // .antMatchers(HttpMethod.POST).hasAnyRole("user","manager","admin")
+            // .antMatchers(HttpMethod.POST).hasAnyAuthority("user","manager","admin")
+            .antMatchers(HttpMethod.POST).hasAuthority("admin")
+
+
             .anyRequest().authenticated()
+            // .antMatchers(HttpMethod.POST)
+            // .anyRequest().authenticated().antMatchers(HttpMethod.POST).permitAll()
             .and()
             .cors() //uncomment to pick up corsFilter bean
             // .configurationSource(corsUrlSetupMiro()) //can be userd instead of currently set Cors Bean
@@ -131,6 +161,20 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         // ;
     }
 
+    // @Override
+    // protected void configure(HttpSecurity http) throws Exception {
+    //     // super.configure(http);
+    //     http.authorizeRequests()
+    //             //place most restrictive urls first; if /** first, then it will never go to the next steps
+    //             .antMatchers("/admin").hasRole(Role.ADMIN.getValue())
+    //             .antMatchers("/user").hasRole(Role.USER.getValue())
+    //             .antMatchers("/public","public2").permitAll()
+    //             .antMatchers("/**") //  /** to access all here and deeper
+    //                 .hasRole(Role.ADMIN.getValue())
+    //             .and()
+    //                   .formLogin();
+    // }
+
 
     // @Autowired
     // DataSource dataSource; //by default pointing to H2
@@ -157,19 +201,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     // }
 
 
-    // @Override
-    // protected void configure(HttpSecurity http) throws Exception {
-    //     // super.configure(http);
-    //     http.authorizeRequests()
-    //             //place most restrictive urls first; if /** first, then it will never go to the next steps
-    //             .antMatchers("/admin").hasRole(Role.ADMIN.getValue())
-    //             .antMatchers("/user").hasRole(Role.USER.getValue())
-    //             .antMatchers("/public","public2").permitAll()
-    //             .antMatchers("/**") //  /** to access all here and deeper
-    //                 .hasRole(Role.ADMIN.getValue())
-    //             .and()
-    //                   .formLogin();
-    // }
+
 
 
     @Bean
