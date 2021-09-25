@@ -113,6 +113,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 
         http
+            .anonymous().and()// to create anonymous user
             .csrf().disable() //TODO: for production, must be reconfigured in order to disable only in specific cases. This line was added because without it, HTTP POST requests did not work.
             .authorizeRequests()
             // .antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
@@ -120,19 +121,22 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             // .antMatchers("/users/**").hasAuthority(Authority.AUTH1.toString())
             // .antMatchers(HttpMethod.POST,"/quiz/update").permitAll() //worked
             // .antMatchers(HttpMethod.POST).hasAnyRole("user","manager","admin") //hasRole -> ROLE_XY
-            .antMatchers(HttpMethod.POST).hasAuthority("admin") //hasAuthority -> XY
+
+            // .antMatchers(HttpMethod.GET,"/**").permitAll()
+            .antMatchers(HttpMethod.GET,"/login/**","/error").permitAll() //not working
+            .antMatchers(HttpMethod.POST).hasAuthority("admin") //hasAuthority/role -> XY (not ROLE_XY)
             .antMatchers(HttpMethod.DELETE).hasAuthority(Authority.admin.getAuthority())
             .antMatchers(HttpMethod.GET).hasAnyAuthority(Authority.user.getAuthority(), Authority.manager.getAuthority(), Authority.admin.getAuthority())
 
 
             // .anyRequest().authenticated()
-            .anyRequest().denyAll()
+            .anyRequest().denyAll() //WANTED
+            // .anyRequest().permitAll()
             .and()
             .cors() //uncomment to pick up corsFilter bean
             // .configurationSource(corsUrlSetupMiro()) //can be userd instead of currently set Cors Bean
-            .and()
-
-            .httpBasic()
+            .and().httpBasic()
+        // .and().anonymous().authorities("anonymousMiro")
 
         // .formLogin().defaultSuccessUrl("/users")
 
@@ -151,8 +155,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         // http //no security:
         //         .csrf().disable() //TODO: for production, must be reconfigured in order to disable only in specific cases. This line was added because without it, HTTP POST requests did not work.
-        //         .authorizeRequests()
-        //         .anyRequest().permitAll()
+        //         .authorizeRequests().anyRequest().permitAll()
         //         .and().cors() //uncomment to pick up corsFilter bean
         // ;
     }
@@ -177,7 +180,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         // auth.jdbcAuthentication().dataSource(dataSource); //connect to specific database
-        auth.userDetailsService(userDetailsService())
+        auth
+            .userDetailsService(userDetailsService())
+            .and().inMemoryAuthentication().withUser(User.withUsername("g").password("g").authorities("guest"))
         ;
     }
 

@@ -4,8 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import makarov.learning.model.User;
 import makarov.learning.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +35,17 @@ public class UserController {
     public String helloWorldBean() {
         //throw new RuntimeException("Some Error has Happened! Contact Support at ***-***");
         return "You are authenticated";
+    }
+
+    @GetMapping("/login")
+    public Object sendUserRoleOrError (Authentication authentication, Principal principal){
+        // if(authentication.isAuthenticated()){
+            // String role = authentication.getAuthorities()
+        return principal;
+            // return authentication;
+
+        // }
+        // else{}
     }
 
 }
