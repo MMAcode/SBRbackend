@@ -6,12 +6,17 @@ import makarov.learning.model.QuizProjection_NameId;
 import makarov.learning.model.QuizProjection_NoAns;
 import makarov.learning.model.QuizProjection_NoChoices;
 import makarov.learning.repository.QuizRepository;
+import makarov.learning.security.Authority;
 import makarov.learning.service.QuizUpdater;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping({"","/","api/"})
@@ -23,9 +28,13 @@ public class QuizController {
     QuizUpdater quizUpdater;
 
     @GetMapping("quizzes")
-    public Iterable<Quiz> getQuizzes(){
-        log.info("quiz - logger");
-        return quizRepository.findAll();
+    // public Iterable<Quiz> getQuizzes(Authentication authentication){
+    public Iterable getQuizzes(Authentication authentication){
+        // if (authentication.getAuthorities().contains(Authority.admin)){ return quizRepository.findAll(); }
+        // else if (authentication.getAuthorities().contains(Authority.manager)){ return quizRepository.findAll(); }
+        // else { return quizRepository.findAll_WithoutAnswers(); }
+        if (authentication.getAuthorities().contains(Authority.user)){ return quizRepository.findAll_WithoutAnswers(); }
+        else { return quizRepository.findAll(); }
     }
 
     @GetMapping("quiz/{id}")
@@ -41,11 +50,11 @@ public class QuizController {
         quiz.addQuestionsPositionsIfNeeded();
         quizRepository.save(quiz);
     }
-    //FILTERED ENTITIES:
-    @GetMapping("qf")
-    public Collection<QuizProjection_NameId> findFiltered(){
-        return quizRepository.findBy();
-    }
+    ////FILTERED ENTITIES:
+    // @GetMapping("qf")
+    // public Collection<QuizProjection_NameId> findFiltered(){
+    //     return quizRepository.findBy();
+    // }
 
     @GetMapping("qf/{id}")
     public Optional<QuizProjection_NoAns> getCleanedQuiz (@PathVariable Long id){

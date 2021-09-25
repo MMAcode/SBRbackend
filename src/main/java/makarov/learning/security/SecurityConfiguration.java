@@ -118,19 +118,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             // .antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
             // .antMatchers("/login", "/register").permitAll()
             // .antMatchers("/users/**").hasAuthority(Authority.AUTH1.toString())
-            // .antMatchers(HttpMethod.POST).hasRole(Role.ADMIN.getValue())
-            // .antMatchers(HttpMethod.POST).hasRole(Authority.admin.getAuthority())
-            // .antMatchers(HttpMethod.POST,"/quiz/update").hasRole("admin")
             // .antMatchers(HttpMethod.POST,"/quiz/update").permitAll() //worked
-            // .antMatchers(HttpMethod.GET).hasAnyRole("user","manager","admin")
-            // .antMatchers(HttpMethod.POST).hasAnyRole("user","manager","admin")
-            // .antMatchers(HttpMethod.POST).hasAnyAuthority("user","manager","admin")
-            .antMatchers(HttpMethod.POST).hasAuthority("admin")
+            // .antMatchers(HttpMethod.POST).hasAnyRole("user","manager","admin") //hasRole -> ROLE_XY
+            .antMatchers(HttpMethod.POST).hasAuthority("admin") //hasAuthority -> XY
+            .antMatchers(HttpMethod.DELETE).hasAuthority(Authority.admin.getAuthority())
+            .antMatchers(HttpMethod.GET).hasAnyAuthority(Authority.user.getAuthority(), Authority.manager.getAuthority(), Authority.admin.getAuthority())
 
 
-            .anyRequest().authenticated()
-            // .antMatchers(HttpMethod.POST)
-            // .anyRequest().authenticated().antMatchers(HttpMethod.POST).permitAll()
+            // .anyRequest().authenticated()
+            .anyRequest().denyAll()
             .and()
             .cors() //uncomment to pick up corsFilter bean
             // .configurationSource(corsUrlSetupMiro()) //can be userd instead of currently set Cors Bean
@@ -199,9 +195,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     // public UserDetailsManager userDetailsManager(){
     //     return new JdbcUserDetailsManager(dataSource);
     // }
-
-
-
 
 
     @Bean

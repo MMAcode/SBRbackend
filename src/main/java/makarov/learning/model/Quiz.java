@@ -56,7 +56,7 @@ public class Quiz {// @Table(name="quizs")
         for (Question q :this.getQuestions()){
             if (q.getPositionFrom0()<0) {
                 q.setPositionFrom0(positionFrom0++);
-                System.out.println();
+                  System.out.println();
 
             }
         }

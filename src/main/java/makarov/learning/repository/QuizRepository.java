@@ -28,7 +28,10 @@ public interface QuizRepository extends JpaRepository<Quiz, Long> {
 
 
     //FILTERED ENTITIES:
-    Collection<QuizProjection_NameId> findBy();
+    Collection<QuizProjection_NoChoices> findBy();
+
+    @Query("select q from Quiz q")
+    Collection<QuizProjection_NoAns> findAll_WithoutAnswers();
     // // Optional<QuizProjection_NoAns> findById(Long id);
 
 
