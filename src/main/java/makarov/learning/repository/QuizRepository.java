@@ -24,11 +24,8 @@ public interface QuizRepository extends JpaRepository<Quiz, Long> {
     @Query("update Quiz q set q.title = ?1 where q.id = ?2")
     int updateQuizTitleMM(String title, String quizId);
 
-
-
-
-    //FILTERED ENTITIES:
-    Collection<QuizProjection_NoChoices> findBy();
+    ////FILTERED ENTITIES:
+    // Collection<QuizProjection_NoChoices> findBy();
 
     @Query("select q from Quiz q")
     Collection<QuizProjection_NoAns> findAll_WithoutAnswers();

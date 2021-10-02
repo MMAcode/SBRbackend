@@ -155,7 +155,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         // http //no security:
         //         .csrf().disable() //TODO: for production, must be reconfigured in order to disable only in specific cases. This line was added because without it, HTTP POST requests did not work.
-        //         .authorizeRequests().anyRequest().permitAll()
+        //     .authorizeRequests()
+        //     // .antMatchers(HttpMethod.GET,"/login/**","/error").permitAll() //not working
+        //     .anyRequest().permitAll()
         //         .and().cors() //uncomment to pick up corsFilter bean
         // ;
     }
@@ -182,7 +184,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         // auth.jdbcAuthentication().dataSource(dataSource); //connect to specific database
         auth
             .userDetailsService(userDetailsService())
-            .and().inMemoryAuthentication().withUser(User.withUsername("g").password("g").authorities("guest"))
+            .and()
+            .inMemoryAuthentication().withUser(User.withUsername("g").password("g").authorities("guest"))
         ;
     }
 
