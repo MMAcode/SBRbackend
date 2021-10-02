@@ -15,6 +15,7 @@ public interface QuizProjection_NoAns {
         public interface ChoiceProjection_NoAns {
             String getId();
             String getTitle();
+            // boolean getCorrectAnswer();
         }
     }
 }
