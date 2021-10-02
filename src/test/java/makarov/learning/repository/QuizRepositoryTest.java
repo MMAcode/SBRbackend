@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -51,7 +52,7 @@ class QuizRepositoryTest {
 
 
     @Test
-    void containsThreeCreatedQuizess() {
+    void findAllGetsAllQuizess() {
         assertThat(quizRepository.findAll_WithoutAnswers().size()).isEqualTo(3);
         assertThat(quizRepository.findAll_WithoutAnswers().stream().map(q -> q.getTitle()))
             .contains("q1")
@@ -60,41 +61,31 @@ class QuizRepositoryTest {
     }
 
     @Test
-    void answersAreNotIncluded() {
+    void answersAreNotIncludedInTheQuiz() {
         Collection<QuizProjection_NoAns> quizzes = quizRepository.findAll_WithoutAnswers();
 
-        // assertThat(quizRepository
-        //     .findAll_WithoutAnswers()
-        //     .stream()
-        //     .filter(q -> "q1".equals(q.getTitle()))
-        //     .findFirst().get()
-        //     .getQuestions().get(0)
-        //     .getChoices().get(0)
-        // // ).hasOnlyFields("title");
-        // ).getClass().getSimpleName().equals("Choice2");
+        assertThat(Arrays.stream(quizRepository
+            .findAll_WithoutAnswers()
+            .stream()
+            .filter(q -> "q1".equals(q.getTitle()))
+            .findFirst().get()
+            .getQuestions().get(0)
+            .getChoices().get(0).getClass().getFields()).count()
+        )
+            .isEqualTo(0);
 
-        // System.out.println(
-        //     quizRepository
-        //         .findAll_WithoutAnswers()
-        //         .stream()
-        //         .filter(q -> "q1".equals(q.getTitle()))
-        //         .findFirst().get()
-        //         .getQuestions().get(0)
-        //         .getChoices().get(0).getClass().getSimpleName()+"abcd"
-        // );
-
-
+        assertThat(
+            Arrays.stream(quizRepository
+                .findAll_WithoutAnswers()
+                .stream()
+                .filter(q -> "q1".equals(q.getTitle()))
+                .findFirst().get()
+                .getQuestions().get(0)
+                .getChoices().get(0).getClass().getMethods()).map(m -> m.getName())
+        )
+            .contains("getId")
+            .doesNotContain("getCorrectAnswer")
+            .doesNotContain("isCorrectAnswer");
     }
-    //
-    // @Test
-    // void findAll_WithoutAnswers() {
-    // }
-    //
-    // @Test
-    // void getQuizById() {
-    // }
-    //
-    // @Test
-    // void getQuizWithoutQuestionOptionsById() {
-    // }
+
 }
