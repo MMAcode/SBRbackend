@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest //to connect repo with database for testing (H2) -> makes @autowire work
-class QuizRepositoryTest {
+class QuizRepositoryTestAsiIT { //IT standing for Integration Test
 
     @Autowired
     QuizRepository quizRepository;

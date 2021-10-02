@@ -59,7 +59,7 @@ public class Question {
         return this.getChoices().stream().filter(c -> c.getId() == id).findAny().orElseThrow(() -> new RuntimeException("choice with id " + id + " not found in question with id " + this.id));
     }
 
-    public void removeChoiceBy(long id) {
-        choices.remove(getChoiceBy(id));
-    }
+    // public void removeChoiceBy(long id) {
+    //     choices.remove(getChoiceBy(id));
+    // }
 }

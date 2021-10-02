@@ -57,7 +57,6 @@ public class Quiz {// @Table(name="quizs")
             if (q.getPositionFrom0()<0) {
                 q.setPositionFrom0(positionFrom0++);
                   System.out.println();
-
             }
         }
         return this;

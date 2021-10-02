@@ -15,8 +15,8 @@ import java.util.List;
 @SpringBootApplication
 public class AppStarter implements CommandLineRunner {
 
-	// @Autowired private UserRepository userRepository;
-	// @Autowired private QuizRepository quizRepository;
+	@Autowired private UserRepository userRepository;
+	@Autowired private QuizRepository quizRepository;
 	// @Autowired HelperMethods helperMethods;
 
 	public static void main(String[] args) {
