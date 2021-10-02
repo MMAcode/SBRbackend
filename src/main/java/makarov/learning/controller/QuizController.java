@@ -7,7 +7,6 @@ import makarov.learning.model.QuizProjection_NoAns;
 import makarov.learning.model.QuizProjection_NoChoices;
 import makarov.learning.repository.QuizRepository;
 import makarov.learning.security.Authority;
-import makarov.learning.service.QuizUpdater;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +23,6 @@ import java.util.stream.Collectors;
 public class QuizController {
     @Autowired
     QuizRepository quizRepository;
-    @Autowired
-    QuizUpdater quizUpdater;
 
     @GetMapping("quizzes")
     // public Iterable<Quiz> getQuizzes(Authentication authentication){

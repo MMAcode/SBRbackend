@@ -88,4 +88,9 @@ class QuizRepositoryTest {
             .doesNotContain("isCorrectAnswer");
     }
 
+    @Test
+    void updateQuiz(){
+
+    }
+
 }
