@@ -31,7 +31,7 @@ alt Save quiz
     note right of UI: saveEditedQuiz sequence...
 else Cancel changes
     Actor -> UI: refresh browser
-note right Actor: TODO ??: implement refresh button?
+note right Actor #lightblue: TODO ??: implement 'Refresh quiz' button?
 end
 
 

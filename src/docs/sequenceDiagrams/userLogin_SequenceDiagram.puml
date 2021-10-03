@@ -6,32 +6,31 @@ participant UI
 participant BackEnd
 database    Database    as Db
 
-User -> UI : enter username
+User -> UI ++: enter username
 User -> UI : enter password
-User -> UI ++: submit form
-
-UI -> BackEnd ++: user NP
-'activate BackEnd
-
+User -> UI : submit form
+UI->UI:Display processing status
+UI ->> BackEnd --++ : user NP
 note left: NP = name & password
-BackEnd -> Db ++: find User
-return user Result
 
-alt user found
-'    BackEnd -> UI : user role
-    return user role
-    UI -> UI: remember user NP
-    note left
+BackEnd -> Db ++ : find User
+Db --> BackEnd -- : user Result
+BackEnd -> BackEnd: process user details
+
+alt #lightgreen user found
+    BackEnd -->> UI --++: user details
+    UI -[#aqua]> UI: remember user details
+    note left #aqua
     temporary solution
     (will be replaced with cookie,etc)
     end note
     UI -> UI : replace login view with logout button
     UI -> UI : update css classes based on user role
-    UI -> BackEnd : request quizzes
+    UI ->> BackEnd : request quizzes
     note right: see "request quizzes" flow
 
-else user not found
-'    return user not found
+else #pink user not found
+    BackEnd -->> UI --: user not found
     UI -> UI: incorrect credentials, try again
 end
 @enduml

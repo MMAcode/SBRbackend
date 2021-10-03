@@ -1,0 +1,30 @@
+@startuml
+start
+
+while (user logged in?) is (no)
+    :log in;
+    endwhile (yes)
+:load all quizzes;
+
+:toggle quiz view on click;
+
+fork
+
+fork again
+    :edit viewed quiz;
+'    :validate edited quiz;
+'    while (quiz is valid?) is (no)
+'        :show problems in UI;
+'        :disable 'Save' buttton;
+'        endwhile (yes)
+'        :enable save button;
+fork again
+    :add quiz;
+fork again
+    :delete quiz;
+end fork
+
+if (Save quiz)
+
+stop
+@enduml

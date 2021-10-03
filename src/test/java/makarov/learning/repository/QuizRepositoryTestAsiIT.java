@@ -4,6 +4,7 @@ import makarov.learning.model.Choice;
 import makarov.learning.model.Question;
 import makarov.learning.model.Quiz;
 import makarov.learning.model.QuizProjection_NoAns;
+import makarov.learning.model.Choice;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
