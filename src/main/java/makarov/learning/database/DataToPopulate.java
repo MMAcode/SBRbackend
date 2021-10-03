@@ -20,7 +20,7 @@ import java.util.List;
 
 @Slf4j
 @Component
-@Profile("resetDb")
+// @Profile("resetDb")
 public class DataToPopulate {
 
     @Autowired
@@ -32,7 +32,7 @@ public class DataToPopulate {
 
     @PostConstruct
     private void handleData(){
-        populateDbWithData();
+        if (!userRepository.findByUsername("x1").isPresent()) {populateDbWithData();}
         // updateData();
     }
     private void populateDbWithData() {

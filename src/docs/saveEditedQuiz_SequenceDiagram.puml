@@ -1,0 +1,34 @@
+
+@startuml
+'autonumber
+actor       User
+participant UI
+participant BackEnd
+database    Database
+
+UI-[#lightblue]>UI:Validate the quiz upon each quiz change \n(Display issue(s) and disable "save" button if appropriate.)
+note right #lightblue:TODO ??
+User -> UI ++: save Quiz changes
+UI->UI:display processing status
+
+UI-->>BackEnd--++:saveQuiz
+BackEnd-[#lightblue]>BackEnd:validateQuiz
+
+note right #lightblue: TODO ??
+BackEnd->Database++:Save New/Updated quiz.
+note right: (logic implemented by Spring Data JPA)
+alt #lightGreen onSuccess
+
+Database-->BackEnd--:saved quiz
+BackEnd-->>UI--++:saved quiz
+UI->UI--:Update UI with received quiz
+else #pink on error (This should not really happen!!!)
+    Database-->BackEnd--:error
+    BackEnd-->>UI:error )
+    UI->UI:Display error
+end
+
+
+
+
+@enduml

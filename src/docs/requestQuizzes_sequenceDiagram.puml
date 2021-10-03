@@ -1,0 +1,13 @@
+@startuml
+participant UI
+participant BackEnd
+database    Database
+
+note over UI:When user authenticated...
+UI->>BackEnd ++: getAllQuizzes
+BackEnd->BackEnd:get user role from user credentials
+BackEnd->Database++: getAllQuizzesForUserRole
+Database-->BackEnd--: appropriate quizzes
+note left:(only 'admin' role will receive also answers)
+BackEnd-->>UI--:allQuizzes
+@enduml

@@ -1,0 +1,38 @@
+
+@startuml
+actor       Actor
+participant UI
+participant BackEnd
+database    Database
+
+Actor ->> UI: login
+note right of UI: login sequence... On success...
+'note over UI, Database: login sequence... On success...
+
+UI ->> BackEnd: get all quizzes.
+note right of UI: getAllQuizzes sequence... On success...
+UI -> UI: Render all quizzes.
+
+group Optional
+Actor -> UI: Add quiz
+UI -> UI: Generate new quiz and render to UI.
+end
+
+Actor -> UI: Select quiz (click).
+UI -> UI: Unwrap quiz.
+
+group repeated edits of specific quiz
+    Actor -> UI: Edit quiz (click, type).
+    note right of UI: update quiz sequence... On success...
+end
+
+alt Save quiz
+    Actor -> UI: Save quiz.
+    note right of UI: saveEditedQuiz sequence...
+else Cancel changes
+    Actor -> UI: refresh browser
+note right Actor: TODO ??: implement refresh button?
+end
+
+
+@enduml

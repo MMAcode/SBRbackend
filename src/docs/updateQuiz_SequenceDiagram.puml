@@ -1,0 +1,15 @@
+
+@startuml
+'autonumber
+actor actor
+participant UI
+
+actor -> UI: Update Quiz action (Question,Choice,Answer)
+
+UI -> UI: Validate change(s).
+alt #lightgreen onSuccess
+    UI -> UI: Enable 'Save Changes' button.
+else #pink onProblem
+UI -> UI: Disable "Save Changes" button.\nDisplay problem message (popover/modal).
+end
+@enduml

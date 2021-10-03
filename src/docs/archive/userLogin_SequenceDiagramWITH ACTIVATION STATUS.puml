@@ -1,0 +1,37 @@
+
+@startuml
+'autonumber
+actor       Actor       as User
+participant UI
+participant BackEnd
+database    Database    as Db
+
+User -> UI : enter username
+User -> UI : enter password
+User -> UI ++: submit form
+
+UI -> BackEnd ++: user NP
+'activate BackEnd
+
+note left: NP = name & password
+BackEnd -> Db ++: find User
+return user Result
+
+alt user found
+'    BackEnd -> UI : user role
+    return user role
+    UI -> UI: remember user NP
+    note left
+    temporary solution
+    (will be replaced with cookie,etc)
+    end note
+    UI -> UI : replace login view with logout button
+    UI -> UI : update css classes based on user role
+    UI -> BackEnd : request quizzes
+    note right: see "request quizzes" flow
+
+else user not found
+'    return user not found
+    UI -> UI: incorrect credentials, try again
+end
+@enduml
