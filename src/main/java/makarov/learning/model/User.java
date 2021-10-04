@@ -32,6 +32,7 @@ public class User {
             username;
     @Column(columnDefinition="varchar(45)") String
             password;
+
     // @ElementCollection private List<String>
     //         authorities;
     // @ElementCollection

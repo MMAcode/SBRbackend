@@ -9,6 +9,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.ArrayList;
@@ -20,6 +21,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest //to connect repo with database for testing (H2) -> makes @autowire work
+//    https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.testing.spring-boot-applications.autoconfigured-spring-data-jpa
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) //acivated = use my real database; unused/commented = use dummy/embedded database
 class QuizRepositoryTestAsiIT { //IT standing for Integration Test
 
     @Autowired
@@ -54,7 +57,6 @@ class QuizRepositoryTestAsiIT { //IT standing for Integration Test
 
     @Test
     void findAllGetsAllQuizess() {
-        assertThat(quizRepository.findAll_WithoutAnswers().size()).isEqualTo(3);
         assertThat(quizRepository.findAll_WithoutAnswers().stream().map(q -> q.getTitle()))
             .contains("q1")
             .contains("q2")
