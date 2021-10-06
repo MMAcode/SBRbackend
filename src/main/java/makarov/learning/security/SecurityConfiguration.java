@@ -5,12 +5,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.security.authentication.RememberMeAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
@@ -19,6 +21,7 @@ import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -52,7 +55,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         final CorsConfiguration config = new CorsConfiguration();
         // config.setAllowCredentials(true);
         // Don't do this in production, use a proper list  of allowed origins
-        config.setAllowedOrigins(Collections.singletonList("*"));
+        // config.setAllowedOrigins(Collections.singletonList("*"));
+        config.setAllowedOrigins(Arrays.asList("http://localhost:3000/","localhost:3000/")); //to allow receive cookies
+        config.setAllowCredentials(true); //to allow receive cookies
         // config.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept"));
         config.setAllowedHeaders(Collections.singletonList("*"));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "OPTIONS", "DELETE", "PATCH"));
@@ -62,34 +67,33 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     // ////REMEMBER ME:
     // //https://stackoverflow.com/questions/29563784/issue-with-spring-security-remember-me-token-not-being-set-on-securitycontexthol
-    // @Bean
-    // public UsernamePasswordAuthenticationFilter usernamePasswordAuthenticationFilter()
-    //         throws Exception {
-    //     UsernamePasswordAuthenticationFilter filter =
-    //             new UsernamePasswordAuthenticationFilter();
-    //     filter.setAuthenticationManager(authenticationManager());
-    //     filter.setRememberMeServices(memberUserDetailsService);
-    //     return filter;
-    // }
-    //
-    // @Bean
-    // public RememberMeAuthenticationFilter rememberMeAuthenticationFilter()
-    //         throws Exception {
-    //     RememberMeAuthenticationFilter filter =
-    //             new RememberMeAuthenticationFilter(authenticationManager(), memberUserDetailsService);
-    //     return filter;
-    // }
-    // private static String rememberMeKey = "uniqueAndSecretMiro";
-    //
-    // @Bean
-    // public RememberMeServices rememberMeServices() throws Exception {
-    //     TokenBasedRememberMeServices rms = new TokenBasedRememberMeServices(rememberMeKey, userDetailsService());
-    //     rms.setAlwaysRemember(true);
-    //     rms.setCookieName("signin");
-    //     // rms.setUseSecureCookie(env.acceptsProfiles("cloud"));
-    //     rms.setUseSecureCookie(false);
-    //     return rms;
-    // }
+    @Bean
+    public UsernamePasswordAuthenticationFilter usernamePasswordAuthenticationFilter()
+            throws Exception {
+        UsernamePasswordAuthenticationFilter filter =
+                new UsernamePasswordAuthenticationFilter();
+        filter.setAuthenticationManager(authenticationManager());
+        filter.setRememberMeServices(rememberMeServices());
+        return filter;
+    }
+
+    @Bean
+    public RememberMeAuthenticationFilter rememberMeAuthenticationFilter()
+            throws Exception {
+        return new RememberMeAuthenticationFilter(authenticationManager(), rememberMeServices());
+    }
+    private static String rememberMeKey = "uniqueAndSecretMiro";
+
+    @Bean
+    public RememberMeServices rememberMeServices() throws Exception {
+        TokenBasedRememberMeServices rms = new TokenBasedRememberMeServices(rememberMeKey, userDetailsService());
+        rms.setAlwaysRemember(true);
+        rms.setCookieName("signin");
+        rms.setParameter("remember-me");
+        // rms.setUseSecureCookie(env.acceptsProfiles("cloud"));
+        rms.setUseSecureCookie(false);
+        return rms;
+    }
 
 
     @Override
@@ -115,7 +119,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
             .anonymous().and()// to create anonymous user
             .csrf().disable() //TODO: for production, must be reconfigured in order to disable only in specific cases. This line was added because without it, HTTP POST requests did not work.
-            .authorizeRequests()
+            // .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).and()
+            .authorizeRequests() //to enable antMatchers
             // .antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
             // .antMatchers("/login", "/register").permitAll()
             // .antMatchers("/users/**").hasAuthority(Authority.AUTH1.toString())
@@ -123,34 +128,43 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             // .antMatchers(HttpMethod.POST).hasAnyRole("user","manager","admin") //hasRole -> ROLE_XY
 
             // .antMatchers(HttpMethod.GET,"/**").permitAll()
-            .antMatchers(HttpMethod.GET,"/login/**","/error").permitAll() //not working
+            .antMatchers(HttpMethod.GET,"/login/**","/logout","/error").permitAll() //not working
             .antMatchers(HttpMethod.POST).hasAuthority("admin") //hasAuthority/role -> XY (not ROLE_XY)
             .antMatchers(HttpMethod.DELETE).hasAuthority(Authority.admin.getAuthority())
             .antMatchers(HttpMethod.GET).hasAnyAuthority(Authority.user.getAuthority(), Authority.manager.getAuthority(), Authority.admin.getAuthority())
 
 
             // .anyRequest().authenticated()
-            .anyRequest().denyAll() //WANTED
+            // .anyRequest().denyAll() //WANTED
             // .anyRequest().permitAll()
             .and()
             .cors() //uncomment to pick up corsFilter bean
             // .configurationSource(corsUrlSetupMiro()) //can be userd instead of currently set Cors Bean
-            .and().httpBasic()
+
+            // .and().httpBasic() //current working
+            .and().formLogin().loginProcessingUrl("/login").defaultSuccessUrl("/login")
+            // .and().logout().logoutSuccessUrl("/login?logout")
+            .and().logout().deleteCookies("JSESSIONID")
+
+
+
+
+
         // .and().anonymous().authorities("anonymousMiro")
 
         // .formLogin().defaultSuccessUrl("/users")
 
         // //REMEMBER ME:
         //with httpBasic: https://gist.github.com/cbeams/f3c36caae7046b03609a
-        // .and().rememberMe()
-        //     .key(rememberMeKey)
-        //     .rememberMeServices(rememberMeServices())
-        // //     .alwaysRemember(true)
-        // //     .rememberMeCookieName("rememberMeCookie")
-        // //     .userDetailsService(userDetailsService())
-        // // .and()
-        // // .addFilter(usernamePasswordAuthenticationFilter())
-        // // .addFilter(rememberMeAuthenticationFilter())
+        .and().rememberMe()
+            .key(rememberMeKey)
+            .rememberMeServices(rememberMeServices())
+            // .alwaysRemember(true)
+            // .rememberMeCookieName("rememberMeCookie")
+            .userDetailsService(userDetailsService())
+        // .and()
+        // .addFilter(usernamePasswordAuthenticationFilter())
+        // .addFilter(rememberMeAuthenticationFilter())
         ;
 
         // http //no security:
@@ -184,7 +198,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         // auth.jdbcAuthentication().dataSource(dataSource); //connect to specific database
         auth
             .userDetailsService(userDetailsService())
-            .and()
+            // .passwordEncoder(getPasswordEncoder())
+            .and().authenticationProvider(new RememberMeAuthenticationProvider("someKey"))
             .inMemoryAuthentication().withUser(User.withUsername("g").password("g").authorities("guest"))
         ;
     }
@@ -208,12 +223,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     // public PasswordEncoder getPasswordEncoder(){
     //     return new BCryptPasswordEncoder();
-    /**
-     * in controller, when receiving new user:
-     * autoimport passwordEncoder
-     * user.setPassword(passwordEncoder.encode(user.getPassword())
-     * then createUser (userDetailsManager.createUser(user))
-     */
     // }
     public PasswordEncoder getPasswordEncoder() {
         return NoOpPasswordEncoder.getInstance();

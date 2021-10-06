@@ -42,10 +42,14 @@ public class UserController {
         // if(authentication.isAuthenticated()){
             // String role = authentication.getAuthorities()
         return principal;
-            // return authentication;
+    }
 
-        // }
-        // else{}
+    @PostMapping("/login")
+    public Object sendUserRoleOrErro (Authentication authentication, Principal principal){
+        System.out.println("postloginreached");
+        // if(authentication.isAuthenticated()){
+        // String role = authentication.getAuthorities()
+        return principal;
     }
 
 }
