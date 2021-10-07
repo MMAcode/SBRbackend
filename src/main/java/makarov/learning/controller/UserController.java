@@ -4,6 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import makarov.learning.model.User;
 import makarov.learning.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,19 +40,38 @@ public class UserController {
         return "You are authenticated";
     }
 
-    @GetMapping("/login")
-    public Object sendUserRoleOrError (Authentication authentication, Principal principal){
-        // if(authentication.isAuthenticated()){
-            // String role = authentication.getAuthorities()
-        return principal;
-    }
+    // @GetMapping("/login")
+    // public Object sendUserRoleOrError (Authentication authentication, Principal principal){
+    //     // if(authentication.isAuthenticated()){
+    //         // String role = authentication.getAuthorities()
+    //     return principal;
+    // }
 
-    @PostMapping("/login")
+    @GetMapping("/userInfo")
     public Object sendUserRoleOrErro (Authentication authentication, Principal principal){
-        System.out.println("postloginreached");
+        // System.out.println("postloginreached");
         // if(authentication.isAuthenticated()){
         // String role = authentication.getAuthorities()
         return principal;
     }
+
+    @GetMapping(value="/loginFailed",produces= MediaType.TEXT_PLAIN_VALUE)
+    public String sendUserError (){
+        // System.out.println("postloginreached");
+        // if(authentication.isAuthenticated()){
+        // String role = authentication.getAuthorities()
+        return "wrong credentials";
+    }
+
+    // @GetMapping("/loginFailed")
+    // public ResponseEntity<String> sendUserError() {
+    //     HttpHeaders responseHeaders = new HttpHeaders();
+    //     responseHeaders.set("Baeldung-Example-Header",
+    //         "Value-ResponseEntityBuilderWithHttpHeaders");
+    //
+    //     return ResponseEntity.ok()
+    //         .headers(responseHeaders)
+    //         .body("Response with header using ResponseEntity");
+    // }
 
 }

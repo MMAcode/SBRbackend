@@ -128,10 +128,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             // .antMatchers(HttpMethod.POST).hasAnyRole("user","manager","admin") //hasRole -> ROLE_XY
 
             // .antMatchers(HttpMethod.GET,"/**").permitAll()
-            .antMatchers(HttpMethod.GET,"/login/**","/logout","/error").permitAll() //not working
+            .antMatchers(HttpMethod.GET,"/login/**","/logout","/error","loginFailed").permitAll() //not working
             .antMatchers(HttpMethod.POST).hasAuthority("admin") //hasAuthority/role -> XY (not ROLE_XY)
             .antMatchers(HttpMethod.DELETE).hasAuthority(Authority.admin.getAuthority())
-            .antMatchers(HttpMethod.GET).hasAnyAuthority(Authority.user.getAuthority(), Authority.manager.getAuthority(), Authority.admin.getAuthority())
+            .and().authorizeRequests()
+            .antMatchers(HttpMethod.GET,"/quizzes").hasAnyAuthority(Authority.user.getAuthority(), Authority.manager.getAuthority(), Authority.admin.getAuthority())
 
 
             // .anyRequest().authenticated()
@@ -142,7 +143,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             // .configurationSource(corsUrlSetupMiro()) //can be userd instead of currently set Cors Bean
 
             // .and().httpBasic() //current working
-            .and().formLogin().loginProcessingUrl("/login").defaultSuccessUrl("/login")
+            .and().formLogin().loginProcessingUrl("/login")
+            .defaultSuccessUrl("/userInfo")
+            // .failureForwardUrl("/loginFailed")
+            // .failureUrl("/loginFailed")
+            .loginPage("/loginFailed")
+            // .successForwardUrl("/userInfo")
+
+            // .and().formLogin().loginProcessingUrl("/login").defaultSuccessUrl("/basicauth")
             // .and().logout().logoutSuccessUrl("/login?logout")
             .and().logout().deleteCookies("JSESSIONID")
 
