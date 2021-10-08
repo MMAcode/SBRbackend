@@ -50,28 +50,13 @@ public class DataToPopulate {
         userRepository.save(User.builder().firstName("user").lastName("Makarov").password("x123").username("x123").authorities(List.of(Authority.user.getAuthority(), Authority.manager.getAuthority(), Authority.admin.getAuthority())).build());
 
 
-        //new
-        Choice c1 = Choice.builder().title("ch1").build();
-        Choice c2 = Choice.builder().title("ch2").correctAnswer(true).build();
-        Choice c3 = Choice.builder().title("ch3").build();
-        Choice c4 = Choice.builder().title("ch4").build();
-
-
-        // also works
-        Question q1 = Question.builder().title("questionA").choices(new ArrayList<>()).build();
-        q1.associateExternalChoices(c1, c2, c3);
-        Question q2 = Question.builder().title("questionB").choices(new ArrayList<>()).build();
-        q2.associateExternalChoices(c1, c2, c3, c4);
-        Question q3 = Question.builder().title("questionC").build();
-        Question q4 = Question.builder().title("questionD").build();
-        Question q5 = Question.builder().title("questionE").build();
-
-        // Quiz qz1 = Quiz.builder().title("quiz 1").build();
-        Quiz qz1 = new Quiz("quiz1").associateQuestion(q1, q2).addQuestionsPositionsIfNeeded();
-        Quiz qz2 = new Quiz("quiz2").associateQuestion(q3, q4).addQuestionsPositionsIfNeeded();
-        quizRepository.save(qz1);
-        quizRepository.save(qz2);
+        quizRepository.save(quizMathsWithFives());
+        quizRepository.save(quizMathsWithTwentyFives());
+        quizRepository.save(quizMathsWith(10));
+        quizRepository.save(quizMathsWith(6));
+        quizRepository.save(quizMathsWith(7));
     }
+
 
     private void updateData(){
         // // UPDATING:
@@ -148,5 +133,101 @@ public class DataToPopulate {
         // Choice c1 = quiz.getQuestions().get(0).getChoices().get(0);
         List<Choice> lc = quiz.getQuestions().get(0).getChoices();
         Collections.swap(lc,0,1);
+    }
+
+    private Quiz quizMathsWithFives(){
+        Question q11 = Question.builder().title("What is 5+5?").choices(new ArrayList<>()).build();
+        Choice c111 = Choice.builder().title("5").build();
+        Choice c112 = Choice.builder().title("10").correctAnswer(true).build();
+        Choice c113 = Choice.builder().title("15").build();
+        Choice c114 = Choice.builder().title("20").build();
+        q11.associateExternalChoices(c111, c112, c113,c114);
+
+        Question q12 = Question.builder().title("What is 5*5?").choices(new ArrayList<>()).build();
+        Choice c121 = Choice.builder().title("5").build();
+        Choice c122 = Choice.builder().title("25").correctAnswer(true).build();
+        Choice c123 = Choice.builder().title("15").build();
+        Choice c124 = Choice.builder().title("20").build();
+        q12.associateExternalChoices(c121, c122, c123, c124);
+
+        Question q13 = Question.builder().title("What is 5*5-5?").choices(new ArrayList<>()).build();
+        Choice c131 = Choice.builder().title("5").build();
+        Choice c132 = Choice.builder().title("25").build();
+        Choice c133 = Choice.builder().title("15").build();
+        Choice c134 = Choice.builder().title("20").correctAnswer(true).build();
+        q13.associateExternalChoices(c131, c132, c133, c134);
+
+        Question q14 = Question.builder().title("What is 5*(5-5)/5?").choices(new ArrayList<>()).build();
+        Choice c141 = Choice.builder().title("5").build();
+        Choice c142 = Choice.builder().title("25").build();
+        Choice c143 = Choice.builder().title("0").correctAnswer(true).build();
+        Choice c144 = Choice.builder().title("20").build();
+        q14.associateExternalChoices(c141, c142, c143, c144);
+
+        return new Quiz("Maths with 5").associateQuestion(q11, q12,q13,q14).addQuestionsPositionsIfNeeded();
+    }
+
+    private Quiz quizMathsWithTwentyFives(){
+        Question q11 = Question.builder().title("What is 25+255?").choices(new ArrayList<>()).build();
+        Choice c111 = Choice.builder().title("280").correctAnswer(true).build();
+        Choice c112 = Choice.builder().title("275").build();
+        Choice c113 = Choice.builder().title("255").build();
+        Choice c114 = Choice.builder().title("205").build();
+        q11.associateExternalChoices(c111, c112, c113,c114);
+
+        Question q12 = Question.builder().title("What is 25*5?").choices(new ArrayList<>()).build();
+        Choice c121 = Choice.builder().title("25").build();
+        Choice c122 = Choice.builder().title("125").correctAnswer(true).build();
+        Choice c123 = Choice.builder().title("155").build();
+        Choice c124 = Choice.builder().title("255").build();
+        q12.associateExternalChoices(c121, c122, c123, c124);
+
+        Question q13 = Question.builder().title("What is 5*25-25?").choices(new ArrayList<>()).build();
+        Choice c131 = Choice.builder().title("500").build();
+        Choice c132 = Choice.builder().title("250").build();
+        Choice c133 = Choice.builder().title("150").build();
+        Choice c134 = Choice.builder().title("100").correctAnswer(true).build();
+        q13.associateExternalChoices(c131, c132, c133, c134);
+
+        Question q14 = Question.builder().title("What is 5*(25-5)/5?").choices(new ArrayList<>()).build();
+        Choice c141 = Choice.builder().title("5").build();
+        Choice c142 = Choice.builder().title("25").build();
+        Choice c143 = Choice.builder().title("0").build();
+        Choice c144 = Choice.builder().title("20").correctAnswer(true).build();
+        q14.associateExternalChoices(c141, c142, c143, c144);
+
+        return new Quiz("Maths with 25").associateQuestion(q11, q12,q13,q14).addQuestionsPositionsIfNeeded();
+    }
+
+    private Quiz quizMathsWith(int i){
+        Question q11 = Question.builder().title("What is "+i+"+"+i+"?").choices(new ArrayList<>()).build();
+        Choice c111 = Choice.builder().title(String.valueOf(i+i)).correctAnswer(true).build();
+        Choice c112 = Choice.builder().title(String.valueOf(i*i)).build();
+        Choice c113 = Choice.builder().title(String.valueOf(i*i-i)).build();
+        Choice c114 = Choice.builder().title(String.valueOf(i*i-1)).build();
+        q11.associateExternalChoices(c111, c112, c113,c114);
+
+        Question q12 = Question.builder().title("What is "+i+"*"+i+"?").choices(new ArrayList<>()).build();
+        Choice c121 = Choice.builder().title(String.valueOf(i+i)).build();
+        Choice c122 = Choice.builder().title(String.valueOf(i*i)).correctAnswer(true).build();
+        Choice c123 = Choice.builder().title(String.valueOf(i*i-i)).build();
+        Choice c124 = Choice.builder().title(String.valueOf(i*i-1)).build();
+        q12.associateExternalChoices(c121, c122, c123, c124);
+
+        Question q13 = Question.builder().title("What is "+i+"*"+i+"-"+i+"?").choices(new ArrayList<>()).build();
+        Choice c131 = Choice.builder().title(String.valueOf(i+i)).build();
+        Choice c132 = Choice.builder().title(String.valueOf(i*i)).build();
+        Choice c133 = Choice.builder().title(String.valueOf(i*i-i)).correctAnswer(true).build();
+        Choice c134 = Choice.builder().title(String.valueOf(i*i-1)).build();
+        q13.associateExternalChoices(c131, c132, c133, c134);
+
+        Question q14 = Question.builder().title("What is"+i+"*"+i+"-"+i+"/"+i+"?").choices(new ArrayList<>()).build();
+        Choice c141 = Choice.builder().title(String.valueOf(i+i)).build();
+        Choice c142 = Choice.builder().title(String.valueOf(i*i)).build();
+        Choice c143 = Choice.builder().title(String.valueOf(i*i-i)).build();
+        Choice c144 = Choice.builder().title(String.valueOf(i*i-1)).correctAnswer(true).build();
+        q14.associateExternalChoices(c141, c142, c143, c144);
+
+        return new Quiz("Maths with "+i).associateQuestion(q11, q12,q13,q14).addQuestionsPositionsIfNeeded();
     }
 }
