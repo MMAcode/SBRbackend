@@ -11,6 +11,7 @@ import makarov.learning.repository.UserRepository;
 import makarov.learning.security.Authority;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -23,6 +24,8 @@ import java.util.List;
 // @Profile("resetDb")
 public class DataToPopulate {
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -43,11 +46,11 @@ public class DataToPopulate {
         // userRepository.save(User.builder().firstName("user").lastName("Makarov").password("x12").username("x12").authorities(List.of(Authority.AUTH1, Authority.AUTH2)).build());
         // userRepository.save(User.builder().firstName("user").lastName("Makarov").password("x123").username("x123").authorities(List.of(Authority.AUTH1, Authority.AUTH2, Authority.AUTH3)).build());
 
-        userRepository.save(User.builder().firstName("user").lastName("Makarov").password("x1").username("x1").authorities(List.of(Authority.user.getAuthority())).build());
-        userRepository.save(User.builder().firstName("user").lastName("Makarov").password("x2").username("x2").authorities(List.of(Authority.manager.getAuthority())).build());
-        userRepository.save(User.builder().firstName("user").lastName("Makarov").password("x3").username("x3").authorities(List.of(Authority.admin.getAuthority())).build());
-        userRepository.save(User.builder().firstName("user").lastName("Makarov").password("x12").username("x12").authorities(List.of(Authority.user.getAuthority(), Authority.manager.getAuthority())).build());
-        userRepository.save(User.builder().firstName("user").lastName("Makarov").password("x123").username("x123").authorities(List.of(Authority.user.getAuthority(), Authority.manager.getAuthority(), Authority.admin.getAuthority())).build());
+        userRepository.save(User.builder().firstName("user").lastName("Makarov").password(passwordEncoder.encode("x1")).username("x1").authorities(List.of(Authority.user.getAuthority())).build());
+        userRepository.save(User.builder().firstName("user").lastName("Makarov").password(passwordEncoder.encode("x2")).username("x2").authorities(List.of(Authority.manager.getAuthority())).build());
+        userRepository.save(User.builder().firstName("user").lastName("Makarov").password(passwordEncoder.encode("x3")).username("x3").authorities(List.of(Authority.admin.getAuthority())).build());
+        userRepository.save(User.builder().firstName("user").lastName("Makarov").password(passwordEncoder.encode("x12")).username("x12").authorities(List.of(Authority.user.getAuthority(), Authority.manager.getAuthority())).build());
+        userRepository.save(User.builder().firstName("user").lastName("Makarov").password(passwordEncoder.encode("x123")).username("x123").authorities(List.of(Authority.user.getAuthority(), Authority.manager.getAuthority(), Authority.admin.getAuthority())).build());
 
 
         quizRepository.save(quizMathsWithFives());

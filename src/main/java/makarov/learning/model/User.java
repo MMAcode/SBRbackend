@@ -30,7 +30,7 @@ public class User {
             sex;
     @NonNull @Column(columnDefinition="varchar(45)", unique = true) String
             username;
-    @Column(columnDefinition="varchar(45)") String
+    @NonNull String
             password;
 
     // @ElementCollection private List<String>

@@ -206,9 +206,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         // auth.jdbcAuthentication().dataSource(dataSource); //connect to specific database
         auth
             .userDetailsService(userDetailsService())
-            // .passwordEncoder(getPasswordEncoder())
+            .passwordEncoder(getPasswordEncoder())
             .and().authenticationProvider(new RememberMeAuthenticationProvider("someKey"))
-            .inMemoryAuthentication().withUser(User.withUsername("g").password("g").authorities("guest"))
+            // .inMemoryAuthentication().withUser(User.withUsername("g").password("g").authorities("guest"))
         ;
     }
 
@@ -229,12 +229,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 
     @Bean
-    // public PasswordEncoder getPasswordEncoder(){
-    //     return new BCryptPasswordEncoder();
-    // }
-    public PasswordEncoder getPasswordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+    public PasswordEncoder getPasswordEncoder(){
+        return new BCryptPasswordEncoder();
     }
+    // public PasswordEncoder getPasswordEncoder() {
+    //     return NoOpPasswordEncoder.getInstance();
+    // }
 
 
     // @Override
