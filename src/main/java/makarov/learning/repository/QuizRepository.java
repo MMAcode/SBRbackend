@@ -15,7 +15,7 @@ import java.util.Collection;
 import java.util.Optional;
 
 @Repository
-@CrossOrigin(origins="")
+// @CrossOrigin(origins="")
 // public interface QuizRepository extends CrudRepository<Quiz, Long> {
 public interface QuizRepository extends JpaRepository<Quiz, Long> {
 

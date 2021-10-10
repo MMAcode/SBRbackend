@@ -1,4 +1,4 @@
-package makarov.learning.security;
+package makarov.learning.security.archive;
 
 public enum Role {
     USER("USER"),

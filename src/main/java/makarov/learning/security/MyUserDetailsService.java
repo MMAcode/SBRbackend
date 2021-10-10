@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Component
-public class MyUserDetailsService_LoadUserByUsername implements UserDetailsService {
+public class MyUserDetailsService implements UserDetailsService {
     @Autowired
     UserRepository userRepository;
 
@@ -23,7 +23,7 @@ public class MyUserDetailsService_LoadUserByUsername implements UserDetailsServi
         Optional<User> user = userRepository.findByUsername(s);
         User u = user.orElseThrow(() -> new UsernameNotFoundException("username not found"));
 
-        UserDetails ud = new MyUserDetails_UserSecurityDetailsService(u);
+        UserDetails ud = new MyUserDetails(u);
         log.info("user {} found",ud.getUsername());
 
         String authorities = ud.getAuthorities()
